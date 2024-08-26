@@ -1,6 +1,7 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
+export const SESSION_KEY = 'appwrite-session'
 export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }

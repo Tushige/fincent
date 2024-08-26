@@ -18,6 +18,7 @@ import {
 } from "@/components/ui/sheet"
 
 import { AppLogo } from './AppLogo'
+import { signOut } from '@/lib/actions'
 
 interface AppLink {
   label: string,
@@ -57,6 +58,13 @@ const NavLinks = ({links}: {links: AppLink[]}) => {
   )
 }
 
+function SignOutForm(props: any) {
+  return (
+    <form action={signOut}>
+      <button type="submit">Sign Out</button>
+    </form>
+  )
+}
 /**
  * 
  * md-lg navigation only displays link icons
@@ -72,7 +80,7 @@ const DesktopNav = () => {
       <div className="h-full flex flex-col gap-2">
         <NavLinks links={_links} />
         <div className="h-auto w-full grow rounded-md bg-fuchsia-50 lg:block"/>
-        <button>Sign Out</button>
+        <SignOutForm>Sign Out</SignOutForm>
       </div>
     </section>
   )
@@ -86,12 +94,29 @@ const MobileNav = () => {
         <span>FINCENT</span>
       </h2>
       <div className="h-full flex flex-col gap-2">
-       <SheetDemo/>
+       <MobileNavSheet/>
       </div>
     </section>
   )
 }
 
+
+export function MobileNavSheet() {
+  return (
+    <Sheet>
+      <SheetTrigger asChild>
+        <Button variant="outline">MENU</Button>
+      </SheetTrigger>
+      <SheetContent>
+        <div className="h-full flex flex-col gap-2">
+          <NavLinks links={_links} />
+          <div className="h-auto w-full grow rounded-md bg-fuchsia-50 lg:block"/>
+          <SignOutForm>Sign Out</SignOutForm>
+        </div>
+      </SheetContent>
+    </Sheet>
+  )
+}
 export const AppSideNav = () => {
   return (
     <>
@@ -102,22 +127,5 @@ export const AppSideNav = () => {
         <MobileNav/>
       </div>
     </>
-  )
-}
-
-export function SheetDemo() {
-  return (
-    <Sheet>
-      <SheetTrigger asChild>
-        <Button variant="outline">MENU</Button>
-      </SheetTrigger>
-      <SheetContent>
-        <div className="h-full flex flex-col gap-2">
-          <NavLinks links={_links} />
-          <div className="h-auto w-full grow rounded-md bg-fuchsia-50 lg:block"/>
-          <button>Sign Out</button>
-        </div>
-      </SheetContent>
-    </Sheet>
   )
 }
