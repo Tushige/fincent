@@ -11,8 +11,8 @@ import {
 
 const SignUpPage = () => {
   return (
-    <section className="w-full h-screen flex justify-center items-center">
-      <Card className="w-[500px]">
+    <section className="w-full md:h-screen flex justify-center items-center">
+      <Card className="w-[600px]">
         <CardHeader>
           <CardTitle>Create an Account</CardTitle>
           <CardDescription>
@@ -31,5 +31,4 @@ const SignUpPage = () => {
     </section>
   )
 }
-
 export default SignUpPage

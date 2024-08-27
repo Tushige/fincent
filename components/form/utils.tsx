@@ -8,11 +8,18 @@ export const signUpFormSchema = () => z.object({
   lastName: z.string().min(1, {
     message: 'last Name must be at least 1 character.'
   }),
+  dateOfBirth: z.string(),
+  ssn: z.string().min(4).max(4),
+
   email: z.string().email(),
   password: z.string().min(8, {
     message: 'Password must be at least 8 characters.'
   }),
   confirm: z.string(),
+  address1: z.string(),
+  city: z.string(),
+  state: z.string(),
+  postalCode: z.string(),
   userAgreement: z.boolean({
     message: 'Please agree to the terms and condition'
   })

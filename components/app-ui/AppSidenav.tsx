@@ -18,7 +18,7 @@ import {
 } from "@/components/ui/sheet"
 
 import { AppLogo } from './AppLogo'
-import { signOut } from '@/lib/actions'
+import { signOut } from '@/lib/actions/auth.actions'
 
 interface AppLink {
   label: string,

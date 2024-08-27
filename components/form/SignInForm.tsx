@@ -8,7 +8,7 @@ import { Button } from "@/components/ui/button"
 import {
   Form
 } from "@/components/ui/form"
-import { signIn } from '@/lib/actions'
+import { signIn } from '@/lib/actions/auth.actions'
 import { AppFormInput } from '../app-ui/AppFormInput'
  
 
