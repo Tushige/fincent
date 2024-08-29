@@ -1,6 +1,19 @@
 import {withSentryConfig} from '@sentry/nextjs';
 /** @type {import('next').NextConfig} */
-const nextConfig = {};
+const nextConfig = {
+  images: {
+    remotePatterns: [
+      {
+        protocol: 'https',
+        hostname: 'plaid-merchant-logos.plaid.com',
+      },
+      {
+        protocol: 'https',
+        hostname: 'images.unsplash.com'
+      }
+    ]
+  }
+};
 
 export default withSentryConfig(nextConfig, {
 // For all available options, see:

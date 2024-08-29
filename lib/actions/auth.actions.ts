@@ -1,25 +1,28 @@
 'use server'
 import { ID } from "node-appwrite";
-import { createAdminClient } from "../server/appwrite"
+import { createAdminClient, createSessionClient } from "../server/appwrite"
 import { cookies } from "next/headers";
 import { redirect } from "next/navigation";
 import { SESSION_KEY } from "../utils";
 import { createDwollaCustomer } from "../server/dwolla";
+import { getUserByAuthUserId, getUserIdFromAuthUserId } from "./users.actions";
 
+/**
+ * 
+ * creates user Auth object 
+ * creates Dwolla customer
+ * creates user doc in the users Collection
+ * 
+ */
 export async function signUpWithEmail({password, email, firstName, lastName, ...user}) {
   let redirectPath: string = ''
   try {
     const { account, database } = await createAdminClient()
     const newUser = await account.create(ID.unique(), email, password, `${firstName} ${lastName}`)
     if (!newUser) throw new Error('1. [Auth] failed to create user') 
-    console.log('1. [signup] SUCCESSfully created user auth')
-    console.log(newUser)
     const dwollaCustomerUrl = await createDwollaCustomer({firstName, lastName, email, ...user, type: 'personal'} as NewDwollaCustomerParams)
     if (!dwollaCustomerUrl) throw new Error('2. [signup] failed to create a dwolla customer with error ')
     const dwollaCustomerId = dwollaCustomerUrl.split('/').pop()
-    console.log('2. [signup] SUCCESSfully created dwolla customer')
-    console.log(dwollaCustomerUrl)
-    console.log(dwollaCustomerId)
     /*
      we have auth user and dwolla user, so let's create a user document in our DB
      */
@@ -32,12 +35,11 @@ export async function signUpWithEmail({password, email, firstName, lastName, ...
         firstName,
         lastName,
         email,
+        authId: newUser.$id,
         dwollaCustomerURL: dwollaCustomerUrl,
         dwollaCustomerId: dwollaCustomerId
       }
     )
-    console.log('3. [AUTH] SUCCESSfully created user document')
-    console.log(newUserDoc)
     // create a session to log in the user
     const session = await account.createEmailPasswordSession(email, password)
   
@@ -67,6 +69,10 @@ export async function signIn({email, password}:{email: string, password: string}
       sameSite: 'strict',
       secure: true
     })
+    const userId = session.$id
+    const userDoc = await getUserByAuthUserId(userId)
+    return userDoc;
+    // fetch user doc here
   } catch (err) {
     console.error('[sign in] failed with error', err)
     redirectPath = '/'
@@ -84,5 +90,17 @@ export async function signOut() {
     console.error(err)
   } finally {
     redirect('/sign-up')
+  }
+}
+
+export async function getSignedInUser() {
+  try {
+    const {account} = await createSessionClient()
+    const authUser = await account.get();
+    const userDoc = await getUserByAuthUserId(authUser.$id)
+    return userDoc;
+  } catch (err) {
+    console.error(err)
+    return null;
   }
 }

@@ -102,9 +102,6 @@ export const SignUpForm = () => {
   const {control, handleSubmit, formState} = form;
   
   const onSubmit= async (data: z.infer<typeof formSchema>) => {
-    console.log('[SignUp Page] this is the form data')
-    console.log(data)
-    console.log('\n')
     await signUpWithEmail(data)
   }
 
@@ -130,7 +127,7 @@ export const SignUpForm = () => {
             control={control}
             name="state"
             render={({ field }) => (
-              <FormItem className="w-full">
+              <FormItem className="w-full" key={field.value}>
                 <FormLabel>State</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
                   <SelectTrigger className="w-[180px]">

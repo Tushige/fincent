@@ -1,5 +1,5 @@
 'use server'
-import { ID } from "node-appwrite";
+import { ID, Query } from "node-appwrite";
 import {createAdminClient} from '@/lib/server/appwrite'
 
 const {
@@ -18,15 +18,6 @@ export const createBankAccount = async ({
   try {
     // create a bank account as a document in our database
     const {database} = await createAdminClient()
-    console.log('[Banks] creating a bank document with the following data')
-    console.log({
-      bankId,
-      accountId,
-      accessToken,
-      fundingSourceURL,
-      shareableId,
-      userId
-    })
     const bankAccount = await database.createDocument(
       NEXT_APPWRITE_DATABASE_ID!,
       NEXT_APPWRITE_BANKS_COLLECTION_ID!,
@@ -43,5 +34,32 @@ export const createBankAccount = async ({
   } catch (err) {
     console.error(err)
     throw err
+  }
+}
+
+export const getBanksByUserId = async (userId: string) => {
+  try {
+    const {database} = await createAdminClient()
+    const bankDocs = await database.listDocuments(
+      NEXT_APPWRITE_DATABASE_ID!,
+      NEXT_APPWRITE_BANKS_COLLECTION_ID!,
+      [Query.equal('userId', [userId])]
+    ) 
+    return bankDocs.documents
+  } catch (err) {
+    console.error('getBanksByUserId failed with error ', err)
+  }
+}
+export const getBankById = async (bankId: string) => {
+  try {
+    const {database} = await createAdminClient() 
+    const bankDoc = await database.getDocument(
+      NEXT_APPWRITE_DATABASE_ID!,
+      NEXT_APPWRITE_BANKS_COLLECTION_ID!,
+      bankId
+    )
+    return bankDoc
+  } catch (err) {
+    console.error(err)
   }
 }

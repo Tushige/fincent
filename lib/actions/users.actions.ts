@@ -1,17 +1,36 @@
+import { Query } from "node-appwrite";
 import { createAdminClient } from "../server/appwrite"
 
-export const getUserById = async (id: string) => {
+export const getUserByAuthUserId = async (id: string) => {
   try {
     const { database } = await createAdminClient();
-    console.log('[getUserById] were getting doc by id ', id)
-    const userDoc = await database.getDocument(
+    const userDoc = await database.listDocuments(
       process.env.NEXT_APPWRITE_DATABASE_ID!,
       process.env.NEXT_APPWRITE_USERS_COLLECTION_ID!,
-      id
+      [
+        Query.equal('authId', [id]),
+        Query.limit(1)
+      ]
     )
-    console.log('[Users Action] got user back')
-    console.log(userDoc)
-    return userDoc
+    return userDoc.documents[0]
+  } catch (err) {
+    console.error(err)
+  }
+}
+
+export const getUserIdFromAuthUserId = async (id: string) => {
+  try {
+    const { database } = await createAdminClient();
+    const userDoc = await database.listDocuments(
+      process.env.NEXT_APPWRITE_DATABASE_ID!,
+      process.env.NEXT_APPWRITE_USERS_COLLECTION_ID!,
+      [
+        Query.equal('authId', [id]),
+        Query.select(['$id']),
+        Query.limit(1)
+      ]
+    )
+    return userDoc.documents[0]
   } catch (err) {
     console.error(err)
   }

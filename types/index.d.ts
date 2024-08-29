@@ -10,7 +10,7 @@ declare type LoginUser = {
 declare type User = {
   $id: string;
   email: string;
-  userId: string;
+  authId: string;
   dwollaCustomerUrl: string;
   dwollaCustomerId: string;
   firstName: string;
@@ -37,6 +37,28 @@ declare interface createBankAccountProps {
   bankId: string;
   fundingSourceURL: string;
   shareableId: string;
+}
+declare type Bank = {
+  $id: string;
+  accountId: string;
+  bankId: string;
+  accessToken: string;
+  fundingSourceUrl: string;
+  userId: string;
+  shareableId: string;
+};
+
+declare type Account = {
+  id: string,
+  availableBalance: number,
+  currentBalance: number,
+  name: string,
+  officialName: string, 
+  mask: string,
+  sybtype: string,
+  type: string,
+  bankId: string
+  shareableId: string 
 }
 
 declare type NewDwollaCustomerParams = {

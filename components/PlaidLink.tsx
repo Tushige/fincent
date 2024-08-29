@@ -6,7 +6,7 @@ import {
 } from 'react-plaid-link';
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
-import { exchangeToken } from '@/lib/actions/plaid.actions';
+import { exchangeToken } from '@/lib/actions/plaid/plaid.actions';
 
 const PlaidLink = ({
   user,
@@ -25,8 +25,7 @@ const PlaidLink = ({
       publicToken,
       user
     )
-    console.log('FINAL STEP. [Plaid Link] done processing moving on to dashboard')
-    router.push('/dashboard')
+    router.push(`/dashboard`)
   } 
   switch(variant) {
     case 'primary':

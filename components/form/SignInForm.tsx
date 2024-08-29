@@ -10,9 +10,11 @@ import {
 } from "@/components/ui/form"
 import { signIn } from '@/lib/actions/auth.actions'
 import { AppFormInput } from '../app-ui/AppFormInput'
+import { useRouter } from 'next/navigation'
  
 
 export const SignInForm = () => {
+  const router = useRouter();
   const formSchema = signInFormSchema();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -23,6 +25,7 @@ export const SignInForm = () => {
   })
   const onSubmit = async (data: z.infer<typeof formSchema>) => {
     await signIn(data)
+    router.push('/dashboard')
   }
   return (
     <Form {...form}>

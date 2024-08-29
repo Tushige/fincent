@@ -23,15 +23,9 @@ export const createDwollaCustomer = async (
   user: NewDwollaCustomerParams
 ) => {
   try {
-    console.log('[DWOLLA] this is the user object')
-    console.log('\n')
-    console.log(user)
-    console.log('\n')
     const customer = await dwollaClient
       .post('customers', user)
       .then(res => res.headers.get('location'))
-    console.log('[createDwollaCustomer] this is customer')
-    console.log(customer)
     return customer;
   } catch (err) {
     console.error('[Dwolla] failed to create customer with error ', err)
@@ -43,7 +37,6 @@ export const createFundingSource = async (
   {customerId, fundingSourceName, plaidToken, _links}: CreateFundingSourceOptions
 ) => {
   // TODO
-  console.log(`[dwolla] attempting to create a funding source for ${fundingSourceName} with token ${plaidToken} and customerId: ${customerId}`)
   try {
     return await dwollaClient
       .post(`customers/${customerId}/funding-sources`, {
@@ -64,16 +57,7 @@ export const addFundingSource = async ({
     const onDemandAuthorization = await dwollaClient.post(
       "on-demand-authorizations"
     );
-    console.log(`[Dwolla] this is the onDemandAuth response`)
-    console.log(onDemandAuthorization)
     const authLink = onDemandAuthorization.body._links;
-
-    const fundingSourceOptions = {
-      customerId,
-      fundingSourceName: bankName,
-      plaidToken: processorToken,
-      _links: authLink
-    } 
     return await createFundingSource({ 
       customerId,
       fundingSourceName: bankName,

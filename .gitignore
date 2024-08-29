@@ -38,3 +38,6 @@ next-env.d.ts
 *.txt
 # Sentry Config File
 .env.sentry-build-plugin
+
+example_transactions.js
+example_account.js
