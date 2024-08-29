@@ -33,7 +33,7 @@ const PlaidLink = ({
         <Button
           onClick={() => open()}
           disabled={!ready}
-          className="text-16 rounded-lg border border-bankGradient bg-bank-gradient font-semibold text-white shadow-form">
+          className="text-16 rounded-lg border border-bankGradient bg-bank-gradient font-semibold text-black hover:text-white shadow-form">
             Connect Bank
         </Button>
       )

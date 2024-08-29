@@ -19,26 +19,6 @@ interface Bank {
 interface BalanceSummaryProps {
   banks: Bank[]
 }
-/**
- * bank: {
- *  balane: Number,
- *  
- * }
- */
-const chartConfig = {
-  chase: {
-    label: 'Chase',
-    color: 'hsl(var(--chart-1))'
-  },
-  america: {
-    label: 'Bank Of America',
-    color: 'hsl(var(--chart-2))'
-  },
-  pnc: {
-    label: 'PNC',
-    color: 'hsl(var(--chart-3))'
-  },
-} satisfies ChartConfig;
 
 export const BalanceSummaryBox = ({banks=[], ...props}: BalanceSummaryProps) => {
   const totalBalanceAmount = useMemo(() => banks.reduce((curr, bank) => curr + bank.balance, 0), [])
@@ -46,8 +26,12 @@ export const BalanceSummaryBox = ({banks=[], ...props}: BalanceSummaryProps) => 
   return (
     <div className="flex flex-column min-h-[200px] min-w-[600px] p-4 gap-4 border-solid border-2 border-indigo-600">
       <div className="basis-3/12">
-        <ChartContainer className="min-w-[250px]" config={chartConfig}>
+        <ChartContainer className="min-w-[250px]">
           <PieChart width={150} height={150}>
+            <ChartTooltip
+              cursor={false}
+              content={<ChartTooltipContent hideLabel />}
+            />
           <Pie
             data={banks}
             nameKey='name'

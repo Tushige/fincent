@@ -6,6 +6,7 @@ import { redirect } from "next/navigation";
 import { SESSION_KEY } from "../utils";
 import { createDwollaCustomer } from "../server/dwolla";
 import { getUserByAuthUserId, getUserIdFromAuthUserId } from "./users.actions";
+import { useReactTable } from "@tanstack/react-table";
 
 /**
  * 
@@ -36,6 +37,12 @@ export async function signUpWithEmail({password, email, firstName, lastName, ...
         lastName,
         email,
         authId: newUser.$id,
+        address1: user.address1,
+        city: user.city,
+        state: user.state,
+        postalCode: user.postalCode,
+        ssn: user.ssn,
+        dateOfBirth: user.dateOfBirth,
         dwollaCustomerURL: dwollaCustomerUrl,
         dwollaCustomerId: dwollaCustomerId
       }

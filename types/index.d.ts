@@ -48,7 +48,7 @@ declare type Bank = {
   shareableId: string;
 };
 
-declare type Account = {
+declare type PlaidAccount = {
   id: string,
   availableBalance: number,
   currentBalance: number,

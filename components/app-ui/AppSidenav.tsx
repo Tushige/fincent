@@ -30,7 +30,7 @@ const _links = [
   {label: 'My Banks', href: '/', icon: BuildingLibraryIcon},
   {label: 'Transaction History', href: '/', icon: DocumentTextIcon},
   {label: 'Payment Transfer', href: '/', icon: BanknotesIcon},
-  {label: 'Connect Bank', href: '/', icon: LinkIcon},
+  {label: 'Connect Bank', href: '/link-banks', icon: LinkIcon},
 ]
 
 const NavLinks = ({links}: {links: AppLink[]}) => {
