@@ -1,11 +1,13 @@
+import { cn } from "@/lib/utils"
 
-export const AppHeader = ({title, subText}: {
+export const AppHeader = ({title, subText, ...props}: {
   title: string,
-  subText: string
+  subText?: string,
+  className?: string
 }) => {
   return (
-    <div className="flex flex-col gap-1">
-      <h1 className="text-24 font-semibold text-slate-900">
+    <div className={cn("flex flex-col gap-1", props.className)} {...props}>
+      <h1 className="text-24 font-semibold text-2xl md:text-4xl">
         {title}
       </h1>
       <p className="">

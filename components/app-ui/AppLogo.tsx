@@ -4,9 +4,10 @@ export const AppLogo = () => {
   return (
     <Image
       src={'/icons/logo.svg'}
-      width={38}
-      height={38}
+      width={48}
+      height={48}
       alt="Company Logo"
+      className="relative left-[5px]"
     />
   )
 }

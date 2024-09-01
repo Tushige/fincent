@@ -26,8 +26,8 @@ interface AppLink {
   icon: React.ForwardRefExoticComponent<Omit<React.SVGProps<SVGSVGElement>, "ref">>
 }
 const _links = [
-  {label: 'Home', href: '/', icon: HomeIcon},
-  {label: 'My Banks', href: '/', icon: BuildingLibraryIcon},
+  {label: 'Dashboard', href: '/dashboard', icon: HomeIcon},
+  {label: 'My Banks', href: '/accounts', icon: BuildingLibraryIcon},
   {label: 'Transaction History', href: '/', icon: DocumentTextIcon},
   {label: 'Payment Transfer', href: '/', icon: BanknotesIcon},
   {label: 'Connect Bank', href: '/link-banks', icon: LinkIcon},
@@ -43,11 +43,11 @@ const NavLinks = ({links}: {links: AppLink[]}) => {
             const LinkIcon = link.icon;
             return (
               <li key={link.href}>
-                <Link href={link.href} className={cn('flex h-[48px] grow items-center gap-2 rounded-md bg-fuchsia-50 p-3 text-sm font-medium hover:bg-fuchsia-100 hover:text-fuchsia-500 md:justify-center lg:justify-start lg:flex-none lg:p-2 lg:px-3', {
+                <Link href={link.href} className={cn('flex h-[48px] grow items-center gap-2 rounded-md bg-background p-3 text-sm font-medium hover:bg-muted md:justify-center lg:justify-start lg:flex-none lg:p-2 lg:px-3', {
                   'bg-fuchsia-100 text-fuchsia-500': pathname === link.href
                 })}>
-                  <LinkIcon className="w-6"/>
-                  <p className="block md:hidden lg:block">{link.label}</p>
+                  <LinkIcon className="w-6 text-text"/>
+                  <p className="block md:hidden lg:block text-text text-medium sm: text-lg">{link.label}</p>
                 </Link>
               </li>
             )
@@ -72,14 +72,14 @@ function SignOutForm(props: any) {
  */
 const DesktopNav = () => {
   return (
-    <section className="w-full h-full flex flex-grow flex-col lg:w-64 md:w-32 px-3 py-4 md:px-2">
-      <h2 className="flex items-center">
+    <section className="w-full h-full flex flex-grow flex-col p-2 lg:w-64 md:w-32 px-3 md:px-2 border-r-[1px] border-border bg-background">
+      <h2 className="flex flex-col lg:flex-row items-center p-2 pt-0 text-lg font-bold">
         <AppLogo />
-        <span>FINCENT</span>
+        <span className="hidden text-2xl lg:block">FINCENT</span>
       </h2>
       <div className="h-full flex flex-col gap-2">
         <NavLinks links={_links} />
-        <div className="h-auto w-full grow rounded-md bg-fuchsia-50 lg:block"/>
+        <div className="h-auto w-full grow rounded-md bg-background lg:block"/>
         <SignOutForm>Sign Out</SignOutForm>
       </div>
     </section>
@@ -89,9 +89,9 @@ const DesktopNav = () => {
 const MobileNav = () => {
   return (
     <section className="w-full h-full flex flex-grow px-3 py-4 justify-between">
-      <h2 className="flex items-center">
+      <h2 className="flex items-center gap-2">
         <AppLogo />
-        <span>FINCENT</span>
+        <span className="">FINCENT</span>
       </h2>
       <div className="h-full flex flex-col gap-2">
        <MobileNavSheet/>
@@ -120,7 +120,7 @@ export function MobileNavSheet() {
 export const AppSideNav = () => {
   return (
     <>
-      <div className="hidden md:block">
+      <div className="hidden w-full h-full md:block">
         <DesktopNav/>
       </div>
       <div className="md:hidden">

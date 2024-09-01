@@ -6,7 +6,8 @@ import { redirect } from "next/navigation";
 import { SESSION_KEY } from "../utils";
 import { createDwollaCustomer } from "../server/dwolla";
 import { getUserByAuthUserId, getUserIdFromAuthUserId } from "./users.actions";
-import { useReactTable } from "@tanstack/react-table";
+import { plaidClient } from "../server/plaid";
+import { createIncomePublicToken, createPlaidUserToken } from "./plaid/plaid.actions";
 
 /**
  * 
@@ -24,6 +25,8 @@ export async function signUpWithEmail({password, email, firstName, lastName, ...
     const dwollaCustomerUrl = await createDwollaCustomer({firstName, lastName, email, ...user, type: 'personal'} as NewDwollaCustomerParams)
     if (!dwollaCustomerUrl) throw new Error('2. [signup] failed to create a dwolla customer with error ')
     const dwollaCustomerId = dwollaCustomerUrl.split('/').pop()
+
+    const userToken = await createPlaidUserToken(newUser.$id)
     /*
      we have auth user and dwolla user, so let's create a user document in our DB
      */
@@ -44,9 +47,12 @@ export async function signUpWithEmail({password, email, firstName, lastName, ...
         ssn: user.ssn,
         dateOfBirth: user.dateOfBirth,
         dwollaCustomerURL: dwollaCustomerUrl,
-        dwollaCustomerId: dwollaCustomerId
+        dwollaCustomerId: dwollaCustomerId,
+        userToken
       }
     )
+    // enable our user_token to use the income API
+    await createIncomePublicToken(userToken)
     // create a session to log in the user
     const session = await account.createEmailPasswordSession(email, password)
   
@@ -91,8 +97,8 @@ export async function signIn({email, password}:{email: string, password: string}
 export async function signOut() {
   try {
     const { account } = await createAdminClient()
-    cookies().delete(SESSION_KEY)
     await account.deleteSession(SESSION_KEY)
+    cookies().delete(SESSION_KEY)
   } catch (err) {
     console.error(err)
   } finally {

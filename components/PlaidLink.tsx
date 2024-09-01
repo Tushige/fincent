@@ -33,13 +33,13 @@ const PlaidLink = ({
         <Button
           onClick={() => open()}
           disabled={!ready}
-          className="text-16 rounded-lg border border-bankGradient bg-bank-gradient font-semibold text-black hover:text-white shadow-form">
+          className="text-16 rounded-lg border border-border bg-background font-semibold text-text hover:text-accent shadow-form">
             Connect Bank
         </Button>
       )
     case 'ghost':
       return (
-        <Button className="flex cursor-pointer items-center justify-center gap-3 rounded-lg px-3 py-7 hover:bg-white lg:justify-start">Connect Bank</Button>
+        <Button className="flex cursor-pointer items-center justify-center gap-3 rounded-lg px-3 py-7 hover:bg-foreground lg:justify-start">Connect Bank</Button>
       )
     default:
       return (

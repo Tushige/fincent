@@ -22,7 +22,10 @@ const config = {
         border: "hsl(var(--border))",
         input: "hsl(var(--input))",
         ring: "hsl(var(--ring))",
-        background: "hsl(var(--background))",
+        background: {
+          DEFAULT: "hsl(var(--background))",
+          light: "hsl(var(--background-light))"
+        },
         foreground: "hsl(var(--foreground))",
         primary: {
           DEFAULT: "hsl(var(--primary))",
@@ -52,6 +55,21 @@ const config = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        text: 'hsl(var(--text))',
+        red: {
+          '1': "hsl(var(--red-1))",
+          '2': "hsl(var(--red-2))",
+          '3': "hsl(var(--red-3))",
+          '4': "hsl(var(--red-4))",
+          '5': "hsl(var(--red-5))",
+        },
+        green: {
+          '1': "hsl(var(--green-1))",
+          '2': "hsl(var(--green-2))",
+          '3': "hsl(var(--green-3))",
+          '4': "hsl(var(--green-4))",
+          '5': "hsl(var(--green-5))",
+        }
       },
       borderRadius: {
         lg: "var(--radius)",

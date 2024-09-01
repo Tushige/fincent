@@ -1,9 +1,18 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Inter, IBM_Plex_Serif, Urbanist } from "next/font/google";
 import "./globals.css";
+import { cn } from "@/lib/utils";
 
-const inter = Inter({ subsets: ["latin"] });
-
+const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
+const ibmPlexSerif = IBM_Plex_Serif({
+  subsets: ['latin'],
+  weight: ['400', '700'],
+  variable: '--font-ibm-plex-serif'
+})
+// const urbanist = Urbanist({subsets: ['latin'], weight: ['400', '500', '600', '700', '800', '900'], variable: '--font-urbanist'})
+const urbanist = Urbanist({
+  subsets: ['latin']
+})
 export const metadata: Metadata = {
   title: "Fincent",
   description: "Financial dashboard",
@@ -14,9 +23,10 @@ export default function RootLayout({
 }: Readonly<{
   children: React.ReactNode;
 }>) {
+  const isDark = true;
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <body className={cn(urbanist.className, {dark: isDark}, 'text-foreground')}>{children}</body>
     </html>
   );
 }
