@@ -35,9 +35,9 @@
     /* --background: 240, 5.7%, 10.4%; */
     --background: 240, 5%, 8%;
     --background-light: 240°, 6%, 12%;
-    --foreground: 210 40% 98%;
-    --card: 240 7% 12%;
-    --card-foreground: 210 40% 98%;
+    --foreground: 210 40% 98%; /* white */
+    --card: 240 7% 12%; /* dark grey */
+    --card-foreground: 210 40% 98%; /* white */
     --popover: 222.2 84% 4.9%;
     --popover-foreground: 210 40% 98%;
     --primary: 210 40% 98%;
@@ -83,6 +83,7 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+
 
 @layer base {
   * {

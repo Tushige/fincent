@@ -28,6 +28,8 @@ export function TransactionsTable<TData, TValue>({
   columns,
   data
 }: DataTableProps<TData, TValue>) {
+  console.log('[UI] thuis is transaction table')
+  console.log(data)
   const table = useReactTable({
     data,
     columns,

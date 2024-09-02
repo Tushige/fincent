@@ -5,6 +5,8 @@ import { revalidatePath } from "next/cache";
 import { createBankAccount, getBankById, getBanksByUserId } from "../banks.actions";
 import { addFundingSource } from "../../server/dwolla";
 import { CATEGORIES_SET, monthIdxToMonthLabel, parseIntoMonthlyIncome } from "@/lib/utils";
+import { Account } from "node-appwrite";
+import { getTransferTransactionsByBankId } from "../transactions.actions";
 
 export async function linkTokenCreateAction({userId, clientName} : {userId: string, clientName: string}) {
   try {
@@ -81,528 +83,7 @@ export const exchangeToken = async (
  * - each account in the accounts list belong to a different bank.
  */
 export const getAccounts = async (userId: string) => {
-  try {[
-    {
-      account_id: 'D3b6EdKRdZcl5EvzGBV4F1eyaPQnQ1h3LPPR7',
-      account_owner: null,
-      amount: 5.4,
-      authorized_date: '2024-08-21',
-      authorized_datetime: null,
-      category: [ 'Travel', 'Taxi' ],
-      category_id: '22016000',
-      check_number: null,
-      counterparties: [ [Object] ],
-      date: '2024-08-22',
-      datetime: null,
-      iso_currency_code: 'USD',
-      location: {
-        address: null,
-        city: null,
-        country: null,
-        lat: null,
-        lon: null,
-        postal_code: null,
-        region: null,
-        store_number: null
-      },
-      logo_url: 'https://plaid-merchant-logos.plaid.com/uber_1060.png',
-      merchant_entity_id: 'eyg8o776k0QmNgVpAmaQj4WgzW9Qzo6O51gdd',
-      merchant_name: 'Uber',
-      name: 'Uber 063015 SF**POOL**',
-      payment_channel: 'online',
-      payment_meta: {
-        by_order_of: null,
-        payee: null,
-        payer: null,
-        payment_method: null,
-        payment_processor: null,
-        ppd_id: null,
-        reason: null,
-        reference_number: null
-      },
-      pending: false,
-      pending_transaction_id: null,
-      personal_finance_category: {
-        confidence_level: 'VERY_HIGH',
-        detailed: 'TRANSPORTATION_TAXIS_AND_RIDE_SHARES',
-        primary: 'TRANSPORTATION'
-      },
-      personal_finance_category_icon_url: 'https://plaid-category-icons.plaid.com/PFC_TRANSPORTATION.png',
-      transaction_code: null,
-      transaction_id: 'ogqQ6wZXwpFRrGPgN198cyaqLq3ljasoeE73R',
-      transaction_type: 'special',
-      unofficial_currency_code: null,
-      website: 'uber.com'
-    },
-    {
-      account_id: 'D3b6EdKRdZcl5EvzGBV4F1eyaPQnQ1h3LPPR7',
-      account_owner: null,
-      amount: -500,
-      authorized_date: '2024-08-20',
-      authorized_datetime: null,
-      category: [ 'Travel', 'Airlines and Aviation Services' ],
-      category_id: '22001000',
-      check_number: null,
-      counterparties: [ [Object] ],
-      date: '2024-08-20',
-      datetime: null,
-      iso_currency_code: 'USD',
-      location: {
-        address: null,
-        city: null,
-        country: null,
-        lat: null,
-        lon: null,
-        postal_code: null,
-        region: null,
-        store_number: null
-      },
-      logo_url: 'https://plaid-merchant-logos.plaid.com/united_airlines_1065.png',
-      merchant_entity_id: 'NKDjqyAdQQzpyeD8qpLnX0D6yvLe2KYKYYzQ4',
-      merchant_name: 'United Airlines',
-      name: 'United Airlines',
-      payment_channel: 'in store',
-      payment_meta: {
-        by_order_of: null,
-        payee: null,
-        payer: null,
-        payment_method: null,
-        payment_processor: null,
-        ppd_id: null,
-        reason: null,
-        reference_number: null
-      },
-      pending: false,
-      pending_transaction_id: null,
-      personal_finance_category: {
-        confidence_level: 'VERY_HIGH',
-        detailed: 'TRAVEL_FLIGHTS',
-        primary: 'TRAVEL'
-      },
-      personal_finance_category_icon_url: 'https://plaid-category-icons.plaid.com/PFC_TRAVEL.png',
-      transaction_code: null,
-      transaction_id: 'gendDmwAmjuReEM7obyVcBDMyMW1GDcEpWnXE',
-      transaction_type: 'special',
-      unofficial_currency_code: null,
-      website: 'united.com'
-    },
-    {
-      account_id: 'D3b6EdKRdZcl5EvzGBV4F1eyaPQnQ1h3LPPR7',
-      account_owner: null,
-      amount: 12,
-      authorized_date: '2024-08-19',
-      authorized_datetime: null,
-      category: [ 'Food and Drink', 'Restaurants', 'Fast Food' ],
-      category_id: '13005032',
-      check_number: null,
-      counterparties: [ [Object] ],
-      date: '2024-08-19',
-      datetime: null,
-      iso_currency_code: 'USD',
-      location: {
-        address: null,
-        city: null,
-        country: null,
-        lat: null,
-        lon: null,
-        postal_code: null,
-        region: null,
-        store_number: '3322'
-      },
-      logo_url: 'https://plaid-merchant-logos.plaid.com/mcdonalds_619.png',
-      merchant_entity_id: 'vzWXDWBjB06j5BJoD3Jo84OJZg7JJzmqOZA22',
-      merchant_name: "McDonald's",
-      name: "McDonald's",
-      payment_channel: 'in store',
-      payment_meta: {
-        by_order_of: null,
-        payee: null,
-        payer: null,
-        payment_method: null,
-        payment_processor: null,
-        ppd_id: null,
-        reason: null,
-        reference_number: null
-      },
-      pending: false,
-      pending_transaction_id: null,
-      personal_finance_category: {
-        confidence_level: 'VERY_HIGH',
-        detailed: 'FOOD_AND_DRINK_FAST_FOOD',
-        primary: 'FOOD_AND_DRINK'
-      },
-      personal_finance_category_icon_url: 'https://plaid-category-icons.plaid.com/PFC_FOOD_AND_DRINK.png',
-      transaction_code: null,
-      transaction_id: '8LMAo94w9BTWdwk1DnLNIyQgjgMEbQsWoqLyZ',
-      transaction_type: 'place',
-      unofficial_currency_code: null,
-      website: 'mcdonalds.com'
-    },
-    {
-      account_id: 'D3b6EdKRdZcl5EvzGBV4F1eyaPQnQ1h3LPPR7',
-      account_owner: null,
-      amount: 4.33,
-      authorized_date: '2024-08-19',
-      authorized_datetime: null,
-      category: [ 'Food and Drink', 'Restaurants', 'Coffee Shop' ],
-      category_id: '13005043',
-      check_number: null,
-      counterparties: [ [Object] ],
-      date: '2024-08-19',
-      datetime: null,
-      iso_currency_code: 'USD',
-      location: {
-        address: null,
-        city: null,
-        country: null,
-        lat: null,
-        lon: null,
-        postal_code: null,
-        region: null,
-        store_number: null
-      },
-      logo_url: 'https://plaid-merchant-logos.plaid.com/starbucks_956.png',
-      merchant_entity_id: 'NZAJQ5wYdo1W1p39X5q5gpb15OMe39pj4pJBb',
-      merchant_name: 'Starbucks',
-      name: 'Starbucks',
-      payment_channel: 'in store',
-      payment_meta: {
-        by_order_of: null,
-        payee: null,
-        payer: null,
-        payment_method: null,
-        payment_processor: null,
-        ppd_id: null,
-        reason: null,
-        reference_number: null
-      },
-      pending: false,
-      pending_transaction_id: null,
-      personal_finance_category: {
-        confidence_level: 'VERY_HIGH',
-        detailed: 'FOOD_AND_DRINK_COFFEE',
-        primary: 'FOOD_AND_DRINK'
-      },
-      personal_finance_category_icon_url: 'https://plaid-category-icons.plaid.com/PFC_FOOD_AND_DRINK.png',
-      transaction_code: null,
-      transaction_id: 'ExmbLkRNkMsq5ko16V7aUP64Z4kLa6c4nbkL9',
-      transaction_type: 'place',
-      unofficial_currency_code: null,
-      website: 'starbucks.com'
-    },
-    {
-      account_id: 'D3b6EdKRdZcl5EvzGBV4F1eyaPQnQ1h3LPPR7',
-      account_owner: null,
-      amount: 89.4,
-      authorized_date: '2024-08-17',
-      authorized_datetime: null,
-      category: [ 'Food and Drink', 'Restaurants' ],
-      category_id: '13005000',
-      check_number: null,
-      counterparties: [ [Object] ],
-      date: '2024-08-18',
-      datetime: null,
-      iso_currency_code: 'USD',
-      location: {
-        address: null,
-        city: null,
-        country: null,
-        lat: null,
-        lon: null,
-        postal_code: null,
-        region: null,
-        store_number: null
-      },
-      logo_url: null,
-      merchant_entity_id: null,
-      merchant_name: 'FUN',
-      name: 'SparkFun',
-      payment_channel: 'in store',
-      payment_meta: {
-        by_order_of: null,
-        payee: null,
-        payer: null,
-        payment_method: null,
-        payment_processor: null,
-        ppd_id: null,
-        reason: null,
-        reference_number: null
-      },
-      pending: false,
-      pending_transaction_id: null,
-      personal_finance_category: {
-        confidence_level: 'LOW',
-        detailed: 'ENTERTAINMENT_SPORTING_EVENTS_AMUSEMENT_PARKS_AND_MUSEUMS',
-        primary: 'ENTERTAINMENT'
-      },
-      personal_finance_category_icon_url: 'https://plaid-category-icons.plaid.com/PFC_ENTERTAINMENT.png',
-      transaction_code: null,
-      transaction_id: 'WEjVBPw8P6h15kDVpv8XSb6JWJnyK6t6zg1G4',
-      transaction_type: 'place',
-      unofficial_currency_code: null,
-      website: null
-    },
-    {
-      account_id: 'D3b6EdKRdZcl5EvzGBV4F1eyaPQnQ1h3LPPR7',
-      account_owner: null,
-      amount: 6.33,
-      authorized_date: '2024-08-04',
-      authorized_datetime: null,
-      category: [ 'Travel', 'Taxi' ],
-      category_id: '22016000',
-      check_number: null,
-      counterparties: [ [Object] ],
-      date: '2024-08-05',
-      datetime: null,
-      iso_currency_code: 'USD',
-      location: {
-        address: null,
-        city: null,
-        country: null,
-        lat: null,
-        lon: null,
-        postal_code: null,
-        region: null,
-        store_number: null
-      },
-      logo_url: 'https://plaid-merchant-logos.plaid.com/uber_1060.png',
-      merchant_entity_id: 'eyg8o776k0QmNgVpAmaQj4WgzW9Qzo6O51gdd',
-      merchant_name: 'Uber',
-      name: 'Uber 072515 SF**POOL**',
-      payment_channel: 'online',
-      payment_meta: {
-        by_order_of: null,
-        payee: null,
-        payer: null,
-        payment_method: null,
-        payment_processor: null,
-        ppd_id: null,
-        reason: null,
-        reference_number: null
-      },
-      pending: false,
-      pending_transaction_id: null,
-      personal_finance_category: {
-        confidence_level: 'VERY_HIGH',
-        detailed: 'TRANSPORTATION_TAXIS_AND_RIDE_SHARES',
-        primary: 'TRANSPORTATION'
-      },
-      personal_finance_category_icon_url: 'https://plaid-category-icons.plaid.com/PFC_TRANSPORTATION.png',
-      transaction_code: null,
-      transaction_id: 'ArA6oB5QB7TzZKpkB45lIZqxAxrLQqu9NzAvy',
-      transaction_type: 'special',
-      unofficial_currency_code: null,
-      website: 'uber.com'
-    },
-    {
-      account_id: 'D3b6EdKRdZcl5EvzGBV4F1eyaPQnQ1h3LPPR7',
-      account_owner: null,
-      amount: 5.4,
-      authorized_date: '2024-07-22',
-      authorized_datetime: null,
-      category: [ 'Travel', 'Taxi' ],
-      category_id: '22016000',
-      check_number: null,
-      counterparties: [ [Object] ],
-      date: '2024-07-23',
-      datetime: null,
-      iso_currency_code: 'USD',
-      location: {
-        address: null,
-        city: null,
-        country: null,
-        lat: null,
-        lon: null,
-        postal_code: null,
-        region: null,
-        store_number: null
-      },
-      logo_url: 'https://plaid-merchant-logos.plaid.com/uber_1060.png',
-      merchant_entity_id: 'eyg8o776k0QmNgVpAmaQj4WgzW9Qzo6O51gdd',
-      merchant_name: 'Uber',
-      name: 'Uber 063015 SF**POOL**',
-      payment_channel: 'online',
-      payment_meta: {
-        by_order_of: null,
-        payee: null,
-        payer: null,
-        payment_method: null,
-        payment_processor: null,
-        ppd_id: null,
-        reason: null,
-        reference_number: null
-      },
-      pending: false,
-      pending_transaction_id: null,
-      personal_finance_category: {
-        confidence_level: 'VERY_HIGH',
-        detailed: 'TRANSPORTATION_TAXIS_AND_RIDE_SHARES',
-        primary: 'TRANSPORTATION'
-      },
-      personal_finance_category_icon_url: 'https://plaid-category-icons.plaid.com/PFC_TRANSPORTATION.png',
-      transaction_code: null,
-      transaction_id: 'L7K6AqGjqEId5bNz79XGcxVZ8AwDwdckEvwdw',
-      transaction_type: 'special',
-      unofficial_currency_code: null,
-      website: 'uber.com'
-    },
-    {
-      account_id: 'D3b6EdKRdZcl5EvzGBV4F1eyaPQnQ1h3LPPR7',
-      account_owner: null,
-      amount: -500,
-      authorized_date: '2024-07-21',
-      authorized_datetime: null,
-      category: [ 'Travel', 'Airlines and Aviation Services' ],
-      category_id: '22001000',
-      check_number: null,
-      counterparties: [ [Object] ],
-      date: '2024-07-21',
-      datetime: null,
-      iso_currency_code: 'USD',
-      location: {
-        address: null,
-        city: null,
-        country: null,
-        lat: null,
-        lon: null,
-        postal_code: null,
-        region: null,
-        store_number: null
-      },
-      logo_url: 'https://plaid-merchant-logos.plaid.com/united_airlines_1065.png',
-      merchant_entity_id: 'NKDjqyAdQQzpyeD8qpLnX0D6yvLe2KYKYYzQ4',
-      merchant_name: 'United Airlines',
-      name: 'United Airlines',
-      payment_channel: 'in store',
-      payment_meta: {
-        by_order_of: null,
-        payee: null,
-        payer: null,
-        payment_method: null,
-        payment_processor: null,
-        ppd_id: null,
-        reason: null,
-        reference_number: null
-      },
-      pending: false,
-      pending_transaction_id: null,
-      personal_finance_category: {
-        confidence_level: 'VERY_HIGH',
-        detailed: 'TRAVEL_FLIGHTS',
-        primary: 'TRAVEL'
-      },
-      personal_finance_category_icon_url: 'https://plaid-category-icons.plaid.com/PFC_TRAVEL.png',
-      transaction_code: null,
-      transaction_id: 'p8KZ6WbLWosPzEMX5Dg8Tn18ZrPQP5upzya8W',
-      transaction_type: 'special',
-      unofficial_currency_code: null,
-      website: 'united.com'
-    },
-    {
-      account_id: 'D3b6EdKRdZcl5EvzGBV4F1eyaPQnQ1h3LPPR7',
-      account_owner: null,
-      amount: 12,
-      authorized_date: '2024-07-20',
-      authorized_datetime: null,
-      category: [ 'Food and Drink', 'Restaurants', 'Fast Food' ],
-      category_id: '13005032',
-      check_number: null,
-      counterparties: [ [Object] ],
-      date: '2024-07-20',
-      datetime: null,
-      iso_currency_code: 'USD',
-      location: {
-        address: null,
-        city: null,
-        country: null,
-        lat: null,
-        lon: null,
-        postal_code: null,
-        region: null,
-        store_number: '3322'
-      },
-      logo_url: 'https://plaid-merchant-logos.plaid.com/mcdonalds_619.png',
-      merchant_entity_id: 'vzWXDWBjB06j5BJoD3Jo84OJZg7JJzmqOZA22',
-      merchant_name: "McDonald's",
-      name: "McDonald's",
-      payment_channel: 'in store',
-      payment_meta: {
-        by_order_of: null,
-        payee: null,
-        payer: null,
-        payment_method: null,
-        payment_processor: null,
-        ppd_id: null,
-        reason: null,
-        reference_number: null
-      },
-      pending: false,
-      pending_transaction_id: null,
-      personal_finance_category: {
-        confidence_level: 'VERY_HIGH',
-        detailed: 'FOOD_AND_DRINK_FAST_FOOD',
-        primary: 'FOOD_AND_DRINK'
-      },
-      personal_finance_category_icon_url: 'https://plaid-category-icons.plaid.com/PFC_FOOD_AND_DRINK.png',
-      transaction_code: null,
-      transaction_id: 'ogqQ6wZXwpFRrGPgN198cyaqdMR4RNIobxEGn',
-      transaction_type: 'place',
-      unofficial_currency_code: null,
-      website: 'mcdonalds.com'
-    },
-    {
-      account_id: 'D3b6EdKRdZcl5EvzGBV4F1eyaPQnQ1h3LPPR7',
-      account_owner: null,
-      amount: 4.33,
-      authorized_date: '2024-07-20',
-      authorized_datetime: null,
-      category: [ 'Food and Drink', 'Restaurants', 'Coffee Shop' ],
-      category_id: '13005043',
-      check_number: null,
-      counterparties: [ [Object] ],
-      date: '2024-07-20',
-      datetime: null,
-      iso_currency_code: 'USD',
-      location: {
-        address: null,
-        city: null,
-        country: null,
-        lat: null,
-        lon: null,
-        postal_code: null,
-        region: null,
-        store_number: null
-      },
-      logo_url: 'https://plaid-merchant-logos.plaid.com/starbucks_956.png',
-      merchant_entity_id: 'NZAJQ5wYdo1W1p39X5q5gpb15OMe39pj4pJBb',
-      merchant_name: 'Starbucks',
-      name: 'Starbucks',
-      payment_channel: 'in store',
-      payment_meta: {
-        by_order_of: null,
-        payee: null,
-        payer: null,
-        payment_method: null,
-        payment_processor: null,
-        ppd_id: null,
-        reason: null,
-        reference_number: null
-      },
-      pending: false,
-      pending_transaction_id: null,
-      personal_finance_category: {
-        confidence_level: 'VERY_HIGH',
-        detailed: 'FOOD_AND_DRINK_COFFEE',
-        primary: 'FOOD_AND_DRINK'
-      },
-      personal_finance_category_icon_url: 'https://plaid-category-icons.plaid.com/PFC_FOOD_AND_DRINK.png',
-      transaction_code: null,
-      transaction_id: 'gendDmwAmjuReEM7obyVcBDMo9alamFE5aWdq',
-      transaction_type: 'place',
-      unofficial_currency_code: null,
-      website: 'starbucks.com'
-    }
-  ]
+  try {
     const banks = await getBanksByUserId(userId)
     const accounts = await Promise.all(banks?.map(async (bank: Bank) => {
       const accountsRes = await plaidClient.accountsGet({access_token: bank.accessToken})
@@ -649,7 +130,7 @@ export const getTransactionsByBankId = async ({bankId}) => {
 }
 
 /**
- * aggregate all transactions across all banks then return top 5 categories
+ * aggregate all transactions across all banks
  * return data format
  * {
  *  categorizedTransactions: [
@@ -663,29 +144,50 @@ export const getAllTransactions = async (user) => {
     // get banks from the database
     const banks = await getBanksByUserId(user.$id)
     const allTransactions = await Promise.all(banks?.map(async (bank: Bank) => {
-      let hasMore = true;
-      let cursor = null
-      let transactions = [];
-
-      while (hasMore) {
-        const res = await plaidClient.transactionsSync({
-          access_token: bank.accessToken,
-          cursor
-        })
-        const data = res.data.added;
-        transactions = transactions.concat(data)
-        cursor = res.data.next_cursor;
-        hasMore = res.data.has_more
-      }
-      return transactions
+      const plaidTransactions = await _getPlaidTransactions(bank.accessToken)
+      const transferTransactions = await getTransferTransactionsByBankId(bank.$id)
+      return [...plaidTransactions, ...transferTransactions]
     }))
-    const categorizedTransactions = formatIntoCategories(allTransactions.flat())
-    return {transactions: allTransactions, categorizedTransactions}
+    const transactions = allTransactions.flat()
+    transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    console.log(transactions)
+    const categorizedTransactions = formatIntoCategories(transactions)
+    return {transactions, categorizedTransactions}
   } catch (err) {
     console.error(err)
   }
 }
+async function _getPlaidTransactions(accessToken: string) {
+  try {
+    let hasMore = true;
+    let cursor = null
+    let transactions = [];
 
+    while (hasMore) {
+      const res = await plaidClient.transactionsSync({
+        access_token: accessToken,
+        cursor
+      })
+      const data = res.data.added.map(d => ({
+        account_id: d.account_id,
+        amount: d.amount,
+        category: d.personal_finance_category?.primary || 'GENEREAL_SERVICE',
+        pending: d.pending,
+        merchant_name: d.merchant_name,
+        name: d.name,
+        paymentChannel: d.payment_channel,
+        logo_url: d.logo_url,
+        date: d.date,
+      }))
+      transactions = transactions.concat(data)
+      cursor = res.data.next_cursor;
+      hasMore = res.data.has_more
+    }
+    return transactions
+  } catch (err) {
+    console.error('[failed to get PLAID Transactions] with error: ', err)
+  }
+}
 export const getBankIncome = async (userDoc: User) => {
   try {
     const incomeReq: CreditBankIncomeGetRequest = {
@@ -703,37 +205,12 @@ export const getBankIncome = async (userDoc: User) => {
   }
 }
 
-function formatIntoCategoriesOld(transactions) {
-  const d = new Array(12).fill(0).map(() => ({
-    total: 0,
-    'FOOD_AND_DRINK': 0,
-    'ENTERTAINMENT': 0,
-    // 'PERSONAL_CARE': 0,
-    'GENERAL_SERVICES': 0,
-    'LOAN_PAYMENTS': 0,
-    'TRANSPORTATION': 0,
-    'GENERAL_MERCHANDISE': 0
-  }))
-  transactions.forEach(transaction => {
-    const amount = transaction.amount
-    const transactionDate = transaction.date;
-    const category = transaction.personal_finance_category.primary;
-    const month = new Date(Date.parse(transactionDate)).getMonth()
-    
-    if (CATEGORIES_SET.has(category)) {
-      d[month][category] += amount
-      d[month].total += amount;
-    }
-
-  })
-  return d;
-}
 function formatIntoCategories(transactions) {
   const d = {}
   transactions.forEach(transaction => {
     const amount = Math.abs(transaction.amount)
     const transactionDate = transaction.date;
-    const category = transaction.personal_finance_category.primary;
+    const category = transaction.category;
     const month = new Date(Date.parse(transactionDate)).getMonth()
     const monthLabel = monthIdxToMonthLabel(month)
     if (!d[monthLabel]) {

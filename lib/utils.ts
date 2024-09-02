@@ -1,12 +1,18 @@
 import { type ClassValue, clsx } from "clsx"
 import { twMerge } from "tailwind-merge"
 
-export const SESSION_KEY = 'appwrite-session'
-export function cn(...inputs: ClassValue[]) {
+const SESSION_KEY = 'appwrite-session'
+function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs))
 }
 
-export function formatUSD(amount: number): string {
+const encryptId = (id: string) => {
+  return btoa(id)
+}
+const decryptId = (id: string) => {
+  return atob(id)
+}
+function formatUSD(amount: number): string {
   const formatter = new Intl.NumberFormat('en-US', {
     style: 'currency',
     currency: 'USD',
@@ -17,7 +23,7 @@ export function formatUSD(amount: number): string {
 
 const idxToMonth = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
 
-export function parseIntoMonthlyIncome(data) {
+function parseIntoMonthlyIncome(data) {
   /**
    * res = {
    *  year: {
@@ -39,7 +45,7 @@ export function parseIntoMonthlyIncome(data) {
   return res;
 }
 
-export const monthIdxToMonthLabel = (monthIdx: number) => {
+const monthIdxToMonthLabel = (monthIdx: number) => {
   const mapping = [
     'January',
     'February',
@@ -57,7 +63,7 @@ export const monthIdxToMonthLabel = (monthIdx: number) => {
   return mapping[monthIdx]
 }
 
-export const CATEGORIES_SET = new Set([
+const CATEGORIES_SET = new Set([
   'FOOD_AND_DRINK',
   'ENTERTAINMENT',
   // 'PERSONAL_CARE',
@@ -66,3 +72,27 @@ export const CATEGORIES_SET = new Set([
   'TRANSPORTATION',
   'GENERAL_MERCHANDISE'
 ])
+
+const categoryLabels = {
+  'FOOD_AND_DRINK': 'Food',
+  'ENTERTAINMENT': 'Fun',
+  'GENERAL_SERVICES': 'Services',
+  'GENERAL_MERCHANDISE': 'Shopping',
+  'TRANSPORTATION': 'Travel',
+  'TRAVEL': 'Travel',
+  'LOAN_PAYMENTS': 'Loans',
+  'TRANSFER_OUT': 'Payment',
+  'PERSONAL_CARE': 'Personal Care',
+  'INCOME': 'Income'
+}
+export {
+  SESSION_KEY,
+  cn,
+  encryptId,
+  decryptId,
+  formatUSD,
+  parseIntoMonthlyIncome,
+  monthIdxToMonthLabel,
+  CATEGORIES_SET,
+  categoryLabels
+}

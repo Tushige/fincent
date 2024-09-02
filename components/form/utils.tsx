@@ -34,3 +34,14 @@ export const signInFormSchema = () => z.object({
   }),
   password: z.string()
 })
+
+
+export const transferFundsFormSchema = () => z.object({
+  email: z.string().email(),
+  memo: z.string().max(150, {
+    message: 'Memo must not be longer than 150 characters'
+  }).optional(),
+  amount: z.string(),
+  senderBankId: z.string().min(4, 'Please select a valid bank account'),
+  shareableId: z.string().min(8, 'Please select a valid shareable id')
+})

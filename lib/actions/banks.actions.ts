@@ -63,3 +63,16 @@ export const getBankById = async (bankId: string) => {
     console.error(err)
   }
 }
+export const getBankByAccountId = async (accountId: string) => {
+  try {
+    const {database} = await createAdminClient() 
+    const bankDoc = await database.listDocuments(
+      NEXT_APPWRITE_DATABASE_ID!,
+      NEXT_APPWRITE_BANKS_COLLECTION_ID!,
+      [Query.equal('accountId', [accountId])]
+    )
+    return bankDoc.documents[0]
+  } catch (err) {
+    console.error(err)
+  }
+}

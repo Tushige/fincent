@@ -28,8 +28,8 @@ interface AppLink {
 const _links = [
   {label: 'Dashboard', href: '/dashboard', icon: HomeIcon},
   {label: 'My Banks', href: '/accounts', icon: BuildingLibraryIcon},
-  {label: 'Transaction History', href: '/', icon: DocumentTextIcon},
-  {label: 'Payment Transfer', href: '/', icon: BanknotesIcon},
+  {label: 'Transaction History', href: '/transaction-history', icon: DocumentTextIcon},
+  {label: 'Payment Transfer', href: '/transfer-funds', icon: BanknotesIcon},
   {label: 'Connect Bank', href: '/link-banks', icon: LinkIcon},
 ]
 
@@ -44,7 +44,7 @@ const NavLinks = ({links}: {links: AppLink[]}) => {
             return (
               <li key={link.href}>
                 <Link href={link.href} className={cn('flex h-[48px] grow items-center gap-2 rounded-md bg-background p-3 text-sm font-medium hover:bg-muted md:justify-center lg:justify-start lg:flex-none lg:p-2 lg:px-3', {
-                  'bg-fuchsia-100 text-fuchsia-500': pathname === link.href
+                  'bg-background ': pathname === link.href
                 })}>
                   <LinkIcon className="w-6 text-text"/>
                   <p className="block md:hidden lg:block text-text text-medium sm: text-lg">{link.label}</p>
@@ -110,7 +110,7 @@ export function MobileNavSheet() {
       <SheetContent>
         <div className="h-full flex flex-col gap-2">
           <NavLinks links={_links} />
-          <div className="h-auto w-full grow rounded-md bg-fuchsia-50 lg:block"/>
+          <div className="h-auto w-full grow rounded-md bg-background lg:block"/>
           <SignOutForm>Sign Out</SignOutForm>
         </div>
       </SheetContent>

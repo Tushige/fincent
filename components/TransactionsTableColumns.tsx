@@ -1,5 +1,5 @@
 'use client'
-import { cn } from "@/lib/utils";
+import { categoryLabels, cn } from "@/lib/utils";
 import { ColumnDef, createColumnHelper } from "@tanstack/react-table"
 import Image from "next/image";
 
@@ -31,7 +31,7 @@ export const columns: ColumnDef<Transaction>[] = [
             <Image src={logo_url} width={48} height={48} alt="company logo" />
           </div>
           {/* <Image width={34} height={34} alt="" src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=2250&q=80"/> */}
-          <span className="text-medium sm:text-lg">{name}</span>
+          <span className="text-medium lg:text-lg">{name}</span>
         </div>
       )
     }
@@ -59,9 +59,9 @@ export const columns: ColumnDef<Transaction>[] = [
   columnHelper.accessor('category', {
     header: () => <div>Category</div>,
     cell: ({row}) => {
-      const categoryList = row.getValue('category')
-      const categoryLabel = categoryList.length > 0 ? categoryList[0] : 'Transfer'
-      return <div className="border-2 rounded-lg border-slate-200 w-fit h-[34px] text-text flex items-center px-1.5 text-sm sm:text-medium">{categoryLabel}</div>
+      const category = row.getValue('category')
+      const categoryLabel = category?.length > 0 ? categoryLabels[category] : 'Transfer'
+      return <div className="border-[1px] rounded-lg border-slate-200 w-fit h-[34px] text-text flex items-center px-1.5 text-sm sm:text-sm">{categoryLabel}</div>
     }
   }),
   columnHelper.accessor('pending', {
@@ -70,11 +70,11 @@ export const columns: ColumnDef<Transaction>[] = [
       const pending = row.getValue('pending')
       if (pending) {
         return (
-          <div className="rounded bg-slate-50 text-slate-600 flex justify-center items-center p-0 h-[34px] text-sm sm:text-medium">pending</div>
+          <div className="rounded bg-slate-50 text-slate-600 flex justify-center items-center p-2 h-[34px] text-sm">pending</div>
         )
       } else {
         return (
-          <div className="rounded bg-green-100 text-green-800 flex justify-center items-center p-0 h-[34px] text-sm sm:text-medium">completed</div>
+          <div className="rounded bg-green-100 text-green-800 flex justify-center items-center p-2 h-[34px] text-sm">completed</div>
         )
       }
     }

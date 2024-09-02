@@ -54,7 +54,7 @@ export function AppBarMixedChart({
             data={data}
             layout="vertical"
             margin={{
-              right: 15,
+              right: 25,
               left: 0
             }}
           >

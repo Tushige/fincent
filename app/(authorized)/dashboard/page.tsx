@@ -12,7 +12,7 @@ const Page = async () => {
   const userDoc = await getSignedInUser();
   // TODO - figure out a way to remove this call because getTransactions returns accounts data anyways. So this is redundant.
   const accounts = await getAccounts(userDoc.$id)
-  const transactions = await getTransactionsByBankId({bankId: accounts[0].bankId})
+  // const transactions = await getTransactionsByBankId({bankId: accounts[0].bankId})
   const allTransactions = await getAllTransactions(userDoc);
   const banks = accounts?.map(account => ({
     name: account.name,
@@ -28,7 +28,7 @@ const Page = async () => {
         <div className="grid grid-cols-1 gap-4 xl:col-span-2">
           <div className="flex flex-col gap-8">
             <CashFlowChartArea className="min-w-64" income={income} expense={allTransactions?.categorizedTransactions}/>
-            <RecentTransactions accounts={transactions.accounts} transactions={transactions.transactions} />
+            <RecentTransactions transactions={allTransactions.transactions} />
           </div>
         </div>
         <div className="grid grid-cols-1 gap-4">

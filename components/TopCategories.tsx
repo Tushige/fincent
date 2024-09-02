@@ -2,7 +2,7 @@
 
 import React, { useState } from 'react'
 import { AppBarMixedChart } from './AppBarMixedChart'
-import { formatUSD } from '@/lib/utils'
+import { categoryLabels, formatUSD } from '@/lib/utils'
 
 const chartData_example = [
   { category: "Food", value: 10, fill: "hsl(var(--chart-1))" },
@@ -27,15 +27,6 @@ const colors = [
   "hsl(var(--chart-5))",
   "hsl(var(--chart-6))"
 ]
-const categoryLabels = {
-  'FOOD_AND_DRINK': 'Food',
-  'ENTERTAINMENT': 'Fun',
-  'GENERAL_SERVICES': 'Services',
-  'GENERAL_MERCHANDISE': 'Shopping',
-  'TRANSPORTATION': 'Travel',
-  'LOAN_PAYMENTS': 'Loans'
-}
-
 function extractMonths (transactions) {
   return Object.keys(transactions)
 }

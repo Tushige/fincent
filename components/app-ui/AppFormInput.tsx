@@ -38,7 +38,7 @@ export const AppFormInput = ({
         <FormItem className={clsx(className)}>
           <FormLabel>{label}</FormLabel>
           <FormControl>
-            <Input placeholder={placeholder} {...field} {...props} />
+            <Input placeholder={placeholder} className="mt-2" {...field} {...props} />
           </FormControl>
           <FormMessage />
         </FormItem>

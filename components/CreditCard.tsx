@@ -20,14 +20,15 @@ export const CreditCard = ({
   fullName,
   mask,
   bankLink,
-  className
+  className,
+  addCopyLink
 }: CreditCardProps) => {
   const [copiedText, copyToClipboard] = useCopyToClipboard()
   const { toast } = useToast()
   const handleClick = () => {
     copyToClipboard(bankLink)
     toast({
-      title: `⭐bank link copied`
+      title: '⭐bank link copied'
     })
   }
   return (
@@ -44,10 +45,14 @@ export const CreditCard = ({
           </div>
         </div>
       </div>
-      <p onClick={handleClick} className="flex flex-row justify-between text-text hover:text-foreground cursor-pointer mt-4">
-        {bankLink}
-        <ClipboardDocumentIcon className="w-6"/>
-      </p>
+      {
+        addCopyLink && (
+          <p onClick={handleClick} className="flex flex-row justify-between text-text hover:text-foreground cursor-pointer mt-4">
+            {bankLink}
+            <ClipboardDocumentIcon className="w-6"/>
+          </p>
+        )
+      }
     </>
   )
 }

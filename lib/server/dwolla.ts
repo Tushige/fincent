@@ -19,7 +19,7 @@ const dwollaClient = new Client({
 });
 
 
-export const createDwollaCustomer = async (
+const createDwollaCustomer = async (
   user: NewDwollaCustomerParams
 ) => {
   try {
@@ -33,10 +33,9 @@ export const createDwollaCustomer = async (
 }
 
 
-export const createFundingSource = async (
+const createFundingSource = async (
   {customerId, fundingSourceName, plaidToken, _links}: CreateFundingSourceOptions
 ) => {
-  // TODO
   try {
     return await dwollaClient
       .post(`customers/${customerId}/funding-sources`, {
@@ -48,7 +47,8 @@ export const createFundingSource = async (
     console.error('[Dwolla] failed creating a funding source with error ', err)
   }
 }
-export const addFundingSource = async ({
+
+const addFundingSource = async ({
   customerId,
   processorToken,
   bankName
@@ -67,4 +67,46 @@ export const addFundingSource = async ({
   } catch (err) {
     console.error('[Dwolla] failed to add fun with error ', err)
   }
+}
+
+const initiateFundTransfer = async ({
+  sourceBank,
+  destinationBank,
+  amount
+}: {
+  sourceBank: Bank,
+  destinationBank: Bank,
+  amount: string
+}) => {
+  try { 
+    if (!sourceBank || !destinationBank || amount === undefined) {
+      throw new Error('[initiateFundTransfer] missing arguments')
+    }
+    const res = await dwollaClient.post('transfers', {
+      _links: {
+        source: {
+          href: sourceBank.fundingSourceURL
+        },
+        destination: {
+          href: destinationBank.fundingSourceURL
+        }
+      },
+      amount: {
+        currency: 'USD',
+        value: amount
+      }
+    })
+    console.log('[Dwolla] fund transfer result')
+    console.log(res.headers.get('location'))
+    return res.headers.get('location');
+  } catch(err) {
+    console.error('transfer fund failed with error: ', err)
+  }
+}
+
+export {
+  createDwollaCustomer,
+  createFundingSource,
+  addFundingSource,
+  initiateFundTransfer
 }

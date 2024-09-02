@@ -30,6 +30,24 @@ declare interface PlaidLinkProps {
   variant?: "primary" | "ghost";
   dwollaCustomerId?: string;
 }
+
+declare interface AccountReqProps {
+  access_token: string
+}
+
+declare interface Account {
+  $id: string,
+  availableBalance: number,
+  currentBalance: number,
+  name: string,
+  officialName: string,
+  mask: string,
+  subType: string,
+  type: string,
+  bankId: string,
+  shareableId: string
+}
+
 declare interface createBankAccountProps {
   accessToken: string;
   userId: string;
@@ -38,28 +56,32 @@ declare interface createBankAccountProps {
   fundingSourceURL: string;
   shareableId: string;
 }
+
 declare type Bank = {
   $id: string;
   accountId: string;
   bankId: string;
   accessToken: string;
-  fundingSourceUrl: string;
+  fundingSourceURL: string;
   userId: string;
   shareableId: string;
 };
 
-declare type PlaidAccount = {
-  id: string,
-  availableBalance: number,
-  currentBalance: number,
+
+declare interface createTransactionProps {
   name: string,
-  officialName: string, 
-  mask: string,
-  sybtype: string,
-  type: string,
-  bankId: string
-  shareableId: string 
+  memo: string,
+  channel: string,
+  category: string,
+  amount: string,
+  email: string
+  senderId: string,
+  receiverId: string,
+  senderBankId: string,
+  receiverBankId: string,
+  status: string
 }
+
 
 declare type NewDwollaCustomerParams = {
   firstName: string;
