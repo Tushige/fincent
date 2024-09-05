@@ -51,8 +51,6 @@ const TransferFundsForm = ({accounts}: {
       if (!transfer) {
         throw new Error('[Transfer Funds] failed fund transfer')
       } 
-      console.log('form data')
-      console.log(data)
       const transactionDoc = await createTransaction({
         memo: data.memo,
         amount: data.amount,

@@ -83,7 +83,35 @@
   -ms-overflow-style: none; /* IE and Edge */
   scrollbar-width: none; /* Firefox */
 }
+.gradient-background {
+  background: radial-gradient(circle at 100% 0%, #051f3c, transparent 60%),linear-gradient(65deg, #521425, black 80%);
+}
+.gradient-background-2 {
+  background: radial-gradient(circle at 100% 0%, #ee3a6d, transparent 60%),linear-gradient(65deg, #bf2273, #4c0519 50%);
+}
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
 
+@keyframes fadeOut {
+  from { opacity: 1; }
+  to { opacity: 0; }
+}
+
+.page-enter {
+  animation: fadeIn 0.5s ease-in;
+}
+
+.page-exit {
+  animation: fadeOut 0.2s ease-out;
+}
+
+.hovered-text {
+  &:hover {
+    color: var(--secondary-foreground);
+  }
+}
 
 @layer base {
   * {

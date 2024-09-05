@@ -49,17 +49,29 @@ const createTransaction = async ({
 }
 
 
-const getTransferTransactionsByBankId = async (bankId: string) => {
+const getTransferTransactionsByBankId = async (bankId: string, offset: number = 0, limit: number = 10) => {
   try {
     const {database} = await createAdminClient()
-    const res = await database.listDocuments(
+    const sendTransfers = await database.listDocuments(
       NEXT_APPWRITE_DATABASE_ID!,
       NEXT_APPWRITE_TRANSACTIONS_COLLECTION_ID!,
       [
+        Query.limit(limit),
+        Query.offset(offset),
         Query.equal('senderBankId', [bankId])
       ]
     )
-    const transactions = res.documents.map(transaction => {
+    const receiverTransfers = await database.listDocuments(
+      NEXT_APPWRITE_DATABASE_ID!,
+      NEXT_APPWRITE_TRANSACTIONS_COLLECTION_ID!,
+      [
+        Query.limit(limit),
+        Query.offset(offset),
+        Query.equal('receiverBankId', [bankId])
+      ]
+    )
+    const documents = [...sendTransfers.documents, ...receiverTransfers.documents]
+    const transactions = documents.map(transaction => {
       const isOutgoing = transaction.senderBankId === bankId
       const createdAt = new Date(transaction.$createdAt)
       const date = `${createdAt.getFullYear()}-${createdAt.getMonth()+1}-${createdAt.getDate()}`
@@ -75,8 +87,7 @@ const getTransferTransactionsByBankId = async (bankId: string) => {
         pending: transaction.status === PENDING
       }
     })
-    console.log('These are transfer')
-    console.log(transactions)
+    
     return transactions;
   } catch (err) {
     console.error('Failed fetching outgoing transactions', err)

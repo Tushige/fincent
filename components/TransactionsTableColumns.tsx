@@ -31,7 +31,7 @@ export const columns: ColumnDef<Transaction>[] = [
             <Image src={logo_url} width={48} height={48} alt="company logo" />
           </div>
           {/* <Image width={34} height={34} alt="" src="https://images.unsplash.com/photo-1464375117522-1311d6a5b81f?ixlib=rb-1.2.1&ixid=MXwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHw%3D&auto=format&fit=crop&w=2250&q=80"/> */}
-          <span className="text-medium lg:text-lg">{name}</span>
+          <span className="text-sm lg:text-medium">{name}</span>
         </div>
       )
     }
@@ -82,7 +82,7 @@ export const columns: ColumnDef<Transaction>[] = [
   // need this to be able to access logo_url in merchant name but we don't want to render the column
   {
     accessorKey: 'logo_url',
-    header: '',
+    header: () => <span className="w-0"/>,
     cell: ''
   },
   {

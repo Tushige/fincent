@@ -3,9 +3,17 @@ import React, { useMemo } from 'react'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+  CarouselNext,
+  CarouselPrevious,
+} from "@/components/ui/carousel"
 import { CreditCard } from './CreditCard'
 import { cn, formatUSD } from '@/lib/utils';
 import { Button } from './ui/button';
+import Link from 'next/link';
 
 ChartJS.register(Tooltip, Legend, ArcElement);
 
@@ -30,12 +38,26 @@ export const BalanceSummaryBox3 = ({
         <CardTitle className="inline-block">
           Your Cards
         </CardTitle>
-        <Button className="rounded-lg w-fit">Add Card +</Button>
+        <Button className="rounded-lg w-fit m-0">
+          <Link href="/link-banks">Add Card +</Link>
+        </Button>
       </CardHeader>
       <CardContent>
         <div className="flex flex-col gap-4">
           <BalanceBox banks={banks}/>
-          <CreditCard bankName={banks[0].name} mask="0000"/>
+          <Carousel className="mt-8">
+            <CarouselContent>
+              {
+                banks.map(bank => (
+                  <CarouselItem key={bank.id}>
+                    <CreditCard bankName={bank.name} mask={bank.mask}/>
+                  </CarouselItem>
+                ))
+              }
+            </CarouselContent>
+            <CarouselPrevious className="top-[-25px] left-[0px]" />
+            <CarouselNext className="top-[-25px] right-[0px]"/>
+          </Carousel>
         </div>
       </CardContent>
     </Card>

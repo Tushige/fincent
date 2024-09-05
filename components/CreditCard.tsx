@@ -48,7 +48,7 @@ export const CreditCard = ({
       {
         addCopyLink && (
           <p onClick={handleClick} className="flex flex-row justify-between text-text hover:text-foreground cursor-pointer mt-4">
-            {bankLink}
+            <span className="max-w-[90%] border-border border-[1px] p-2 rounded-lg overflow-hidden gradient-background-2">{bankLink}</span>
             <ClipboardDocumentIcon className="w-6"/>
           </p>
         )

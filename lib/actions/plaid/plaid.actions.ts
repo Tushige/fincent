@@ -1,8 +1,8 @@
 'use server'
 import { plaidClient } from "../../server/plaid";
-import { CountryCode, CreditBankIncomeGetRequest, PlaidApi, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid";
+import { ConsumerReportPermissiblePurpose, CountryCode, CreditBankIncomeGetRequest, PlaidApi, ProcessorTokenCreateRequestProcessorEnum, Products } from "plaid";
 import { revalidatePath } from "next/cache";
-import { createBankAccount, getBankById, getBanksByUserId } from "../banks.actions";
+import { createBankAccount, getBankByAccountId, getBankById, getBanksByUserId } from "../banks.actions";
 import { addFundingSource } from "../../server/dwolla";
 import { CATEGORIES_SET, monthIdxToMonthLabel, parseIntoMonthlyIncome } from "@/lib/utils";
 import { Account } from "node-appwrite";
@@ -86,7 +86,7 @@ export const getAccounts = async (userId: string) => {
   try {
     const banks = await getBanksByUserId(userId)
     const accounts = await Promise.all(banks?.map(async (bank: Bank) => {
-      const accountsRes = await plaidClient.accountsGet({access_token: bank.accessToken})
+      const accountsRes = await plaidClient.accountsGet({access_token: bank?.accessToken})
       const d = accountsRes.data.accounts[0];
       const account = {
         id: d.account_id,
@@ -108,6 +108,33 @@ export const getAccounts = async (userId: string) => {
   }
 }
 
+export const getAccount = async (bankId: string) => {
+  try {
+    const bank = await getBankById(bankId)
+    const accountRes = await plaidClient.accountsGet({
+      access_token: bank?.accessToken
+    })
+    const d = accountRes.data.accounts[0]
+    const account = {
+      id: d.account_id,
+      availableBalance: d.balances.available,
+      currentBalance: d.balances.current,
+      name: d.name,
+      officialName: d.official_name,
+      mask: d.mask,
+      subtype: d.subtype,
+      type: d.type,
+      bankId: bank.$id,
+      shareableId: bank.shareableId
+    }
+    return account
+  } catch(err) {
+    console.error(err)
+  }
+}
+/**
+ * unused
+ */
 export const getTransactionsByBankId = async ({bankId}) => {
   try {
     const bank = await getBankById(bankId)
@@ -130,64 +157,55 @@ export const getTransactionsByBankId = async ({bankId}) => {
 }
 
 /**
- * aggregate all transactions across all banks
- * return data format
- * {
- *  categorizedTransactions: [
- *  {category: cost }, -> total expense in category in January
- *  {category: cost}
- * ]
- * }
+ * for a given bankId, we get 2 types of transactions with pagination
+ * 1. plaid provided transactions starting at <cursor>
+ * 2. transfer in/out transactions saved in the DB using <offset>
  */
-export const getAllTransactions = async (user) => {
+export const getTransactionsByBank = async (bankId: string, cursor, offset) => {
+  try {
+    const bank = await getBankById(bankId)
+    const plaidTransactions = await _getPlaidTransactions(bank.accessToken, cursor)
+    const transferTransactions = await getTransferTransactionsByBankId(bankId, offset)
+    const transactions = [...plaidTransactions.transactions, ...transferTransactions]
+    transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+    const categorizedTransactions = formatIntoCategories(transactions)
+    return {
+      next_cursor: plaidTransactions.next_cursor,
+      has_more: plaidTransactions.has_more,
+      transactions,
+      categorizedTransactions
+    }
+  } catch (err) {
+    console.error(err)
+  }
+}
+/**
+get ALl transactions without pagination in order to generate monthly expenses graph
+ */
+export const getAllTransactions = async (userId) => {
   try {
     // get banks from the database
-    const banks = await getBanksByUserId(user.$id)
+    const banks = await getBanksByUserId(userId)
     const allTransactions = await Promise.all(banks?.map(async (bank: Bank) => {
-      const plaidTransactions = await _getPlaidTransactions(bank.accessToken)
-      const transferTransactions = await getTransferTransactionsByBankId(bank.$id)
-      return [...plaidTransactions, ...transferTransactions]
+      let {transactions, has_more, next_cursor} = await _getPlaidTransactions(bank.accessToken, null, 100)
+      while (has_more) {
+        const nextTransactions = await __getPlaidTransactions(bank.accessToken, next_cursor, 100)
+        next_cursor = nextTransactions.next_cursor
+        has_more = nextTransactions.has_more
+        transactions = transactions.concat(nextTransactions.transactions)
+      }
+      const transferTransactions = await getTransferTransactionsByBankId(bank.$id, 0, 100)
+      return [...transactions, ...transferTransactions]
     }))
     const transactions = allTransactions.flat()
     transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
-    console.log(transactions)
     const categorizedTransactions = formatIntoCategories(transactions)
     return {transactions, categorizedTransactions}
   } catch (err) {
     console.error(err)
   }
 }
-async function _getPlaidTransactions(accessToken: string) {
-  try {
-    let hasMore = true;
-    let cursor = null
-    let transactions = [];
 
-    while (hasMore) {
-      const res = await plaidClient.transactionsSync({
-        access_token: accessToken,
-        cursor
-      })
-      const data = res.data.added.map(d => ({
-        account_id: d.account_id,
-        amount: d.amount,
-        category: d.personal_finance_category?.primary || 'GENEREAL_SERVICE',
-        pending: d.pending,
-        merchant_name: d.merchant_name,
-        name: d.name,
-        paymentChannel: d.payment_channel,
-        logo_url: d.logo_url,
-        date: d.date,
-      }))
-      transactions = transactions.concat(data)
-      cursor = res.data.next_cursor;
-      hasMore = res.data.has_more
-    }
-    return transactions
-  } catch (err) {
-    console.error('[failed to get PLAID Transactions] with error: ', err)
-  }
-}
 export const getBankIncome = async (userDoc: User) => {
   try {
     const incomeReq: CreditBankIncomeGetRequest = {
@@ -205,29 +223,6 @@ export const getBankIncome = async (userDoc: User) => {
   }
 }
 
-function formatIntoCategories(transactions) {
-  const d = {}
-  transactions.forEach(transaction => {
-    const amount = Math.abs(transaction.amount)
-    const transactionDate = transaction.date;
-    const category = transaction.category;
-    const month = new Date(Date.parse(transactionDate)).getMonth()
-    const monthLabel = monthIdxToMonthLabel(month)
-    if (!d[monthLabel]) {
-      // initialize the total amount of each category we're tracking to 0
-      d[monthLabel] = {total: 0}
-      CATEGORIES_SET.forEach(c => d[monthLabel][c] = 0)
-    }
-    if (CATEGORIES_SET.has(category)) {
-      d[monthLabel][category] += amount
-      d[monthLabel].total += amount
-    } else if (category === 'TRANSFER_OUT' || category === 'PERSONAL_CARE') { // customer merges
-      d[monthLabel]['GENERAL_SERVICES'] += amount
-      d[monthLabel].total += amount
-    }
-  })
-  return d
-}
 
 export const createPlaidUserToken = async (userId) => {
   try {
@@ -261,4 +256,57 @@ export const createIncomePublicToken = async (userToken) => {
   } catch (error) {
     console.error('Error creating sandbox public token:', error);
   }
+}
+
+/**
+ * returns transactions and pagination cursor
+ */
+async function _getPlaidTransactions(accessToken: string, cursor: string | null, limit = 1) {
+  try {
+      const res = await plaidClient.transactionsSync({
+        access_token: accessToken,
+        count: limit,
+        cursor: cursor || null
+      })
+      const data = res.data.added.map(d => ({
+        account_id: d.account_id,
+        amount: d.amount,
+        category: d.personal_finance_category?.primary || 'GENEREAL_SERVICE',
+        pending: d.pending,
+        merchant_name: d.merchant_name,
+        name: d.name,
+        paymentChannel: d.payment_channel,
+        logo_url: d.logo_url,
+        date: d.date,
+      }))
+      const next_cursor = res.data.next_cursor;
+      const has_more = res.data.has_more
+    return {transactions: data, has_more, next_cursor}
+  } catch (err) {
+    console.error('[failed to get PLAID Transactions] with error: ', err)
+  }
+}
+
+function formatIntoCategories(transactions) {
+  const d = {}
+  transactions.forEach(transaction => {
+    const amount = Math.abs(transaction.amount)
+    const transactionDate = transaction.date;
+    const category = transaction.category;
+    const month = new Date(Date.parse(transactionDate)).getMonth()
+    const monthLabel = monthIdxToMonthLabel(month)
+    if (!d[monthLabel]) {
+      // initialize the total amount of each category we're tracking to 0
+      d[monthLabel] = {total: 0}
+      CATEGORIES_SET.forEach(c => d[monthLabel][c] = 0)
+    }
+    if (CATEGORIES_SET.has(category)) {
+      d[monthLabel][category] += amount
+      d[monthLabel].total += amount
+    } else if (category === 'TRANSFER_OUT' || category === 'PERSONAL_CARE') { // customer merges
+      d[monthLabel]['GENERAL_SERVICES'] += amount
+      d[monthLabel].total += amount
+    }
+  })
+  return d
 }

@@ -7,11 +7,15 @@ import {
 import { useRouter } from 'next/navigation';
 import { Button } from './ui/button';
 import { exchangeToken } from '@/lib/actions/plaid/plaid.actions';
-
+import {
+  LinkIcon
+} from '@heroicons/react/24/outline'
+import { cn } from '@/lib/utils';
 const PlaidLink = ({
   user,
   token,
-  variant = 'primary'
+  variant = 'primary',
+  className
 }: PlaidLinkProps) => {
   const router = useRouter();
   const config = {
@@ -37,13 +41,17 @@ const PlaidLink = ({
             Connect Bank
         </Button>
       )
-    case 'ghost':
+    case 'link':
       return (
-        <Button className="flex cursor-pointer items-center justify-center gap-3 rounded-lg px-3 py-7 hover:bg-foreground lg:justify-start">Connect Bank</Button>
-      )
-    default:
-      return (
-        <Button className="flex !justify-start cursor-pointer gap-3 rounded-lg !bg-transparent flex-row">Connect bank</Button>
+        <Button
+          onClick={() => {
+            open()
+          }}
+          className={cn("flex h-[48px] items-center gap-2 rounded-md bg-background p-3 text-sm font-medium hover:bg-muted md:justify-center lg:justify-start lg:flex-none lg:p-2 lg:px-3", className)}
+        >
+          <LinkIcon className="w-6 text-text"/>
+          <p className="block md:hidden lg:block text-text text-medium sm: text-lg">Connect Bank</p>
+        </Button>
       )
   }
 }

@@ -17,26 +17,29 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table"
+import { Skeleton } from './ui/skeleton'
+import { cn } from '@/lib/utils'
 
 
 interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
-  data: TData[]
+  data: TData[],
+  loading?: boolean
 }
 
 export function TransactionsTable<TData, TValue>({
   columns,
-  data
+  data,
+  loading,
+  className
 }: DataTableProps<TData, TValue>) {
-  console.log('[UI] thuis is transaction table')
-  console.log(data)
   const table = useReactTable({
     data,
     columns,
     getCoreRowModel: getCoreRowModel()
   })
   return (
-    <div className="rounded-md border">
+    <div className={cn("rounded-md border min-w-[250px] lg:min-w-[100%]", className)}>
       <Table>
         <TableHeader>
           {table.getHeaderGroups().map((headerGroup) => (
@@ -71,12 +74,9 @@ export function TransactionsTable<TData, TValue>({
                 </TableRow>
             )})
           ) : (
-            <TableRow>
-              <TableCell colSpan={columns.length} className="h-24 text-center">
-                No results.
-              </TableCell>
-            </TableRow>
-          )}
+            <div>No Data</div>
+            )
+          }
         </TableBody>
       </Table>
     </div>

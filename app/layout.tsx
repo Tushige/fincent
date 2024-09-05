@@ -1,7 +1,10 @@
 import type { Metadata } from "next";
 import { Inter, IBM_Plex_Serif, Urbanist } from "next/font/google";
+import {ProgressBar, ProgressBarProvider} from 'react-transition-progress'
 import "./globals.css";
 import { cn } from "@/lib/utils";
+import { Suspense } from "react";
+import AppLoader from "@/components/app-ui/AppLoader";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const ibmPlexSerif = IBM_Plex_Serif({
@@ -26,7 +29,12 @@ export default function RootLayout({
   const isDark = true;
   return (
     <html lang="en">
-      <body className={cn(urbanist.className, {dark: isDark}, 'text-foreground')}>{children}</body>
+      <body className={cn(urbanist.className, {dark: isDark}, 'text-foreground')}>
+        <ProgressBarProvider>
+          <ProgressBar className="fixed h-1 shadow-lg shadow-red-500/20 bg-red-500 top-0"/>
+          {children}
+        </ProgressBarProvider>
+      </body>
     </html>
   );
 }

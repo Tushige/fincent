@@ -11,7 +11,7 @@ export default function RootLayout({
       <div className="pt-4 md:h-screen md:sticky md:top-0 sm:left-0">
         <AppSideNav />
       </div>
-      <main className="mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-[90%] lg:px-8">
+      <main className="md:mx-auto max-w-3xl px-4 sm:px-6 lg:max-w-[90%] lg:px-8">
         {children}
       </main>
       <Toaster />

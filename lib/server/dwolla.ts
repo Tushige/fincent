@@ -96,8 +96,6 @@ const initiateFundTransfer = async ({
         value: amount
       }
     })
-    console.log('[Dwolla] fund transfer result')
-    console.log(res.headers.get('location'))
     return res.headers.get('location');
   } catch(err) {
     console.error('transfer fund failed with error: ', err)

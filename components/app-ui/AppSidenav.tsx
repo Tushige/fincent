@@ -16,9 +16,13 @@ import {
   SheetContent,
   SheetTrigger,
 } from "@/components/ui/sheet"
+import {
+  ArrowLeftEndOnRectangleIcon
+} from '@heroicons/react/24/outline'
 
 import { AppLogo } from './AppLogo'
 import { signOut } from '@/lib/actions/auth.actions'
+import PlaidLink from '../PlaidLink'
 
 interface AppLink {
   label: string,
@@ -29,23 +33,22 @@ const _links = [
   {label: 'Dashboard', href: '/dashboard', icon: HomeIcon},
   {label: 'My Banks', href: '/accounts', icon: BuildingLibraryIcon},
   {label: 'Transaction History', href: '/transaction-history', icon: DocumentTextIcon},
-  {label: 'Payment Transfer', href: '/transfer-funds', icon: BanknotesIcon},
-  {label: 'Connect Bank', href: '/link-banks', icon: LinkIcon},
+  {label: 'Transfer Funds', href: '/transfer-funds', icon: BanknotesIcon}
 ]
 
 const NavLinks = ({links}: {links: AppLink[]}) => {
   const pathname = usePathname()
   return (
-    <nav>
+    <nav className="w-full">
       <ul className="mt-2 flex flex-col space-y-2 pt-4 md:pt-0">
         {
           links.map((link: AppLink, i: number) => {
             const LinkIcon = link.icon;
             return (
-              <li key={link.href}>
-                <Link href={link.href} className={cn('flex h-[48px] grow items-center gap-2 rounded-md bg-background p-3 text-sm font-medium hover:bg-muted md:justify-center lg:justify-start lg:flex-none lg:p-2 lg:px-3', {
-                  'bg-background ': pathname === link.href
-                })}>
+              <li key={link.href} className="w-full">
+                <Link href={link.href} className={cn('w-full flex h-[48px] grow items-center gap-2 rounded-md bg-background p-3 text-sm font-medium hover:bg-muted md:justify-center lg:justify-start lg:flex-none lg:p-2 lg:px-3', 
+                  {'bg-muted ': pathname === link.href})
+                }>
                   <LinkIcon className="w-6 text-text"/>
                   <p className="block md:hidden lg:block text-text text-medium sm: text-lg">{link.label}</p>
                 </Link>
@@ -61,7 +64,10 @@ const NavLinks = ({links}: {links: AppLink[]}) => {
 function SignOutForm(props: any) {
   return (
     <form action={signOut}>
-      <button type="submit">Sign Out</button>
+      <button type="submit" className="w-full rounded-md flex flex-row gap-2 flex-start p-2 hover:bg-muted">
+        <ArrowLeftEndOnRectangleIcon className="w-6 text-text"/>
+        Sign Out
+      </button>
     </form>
   )
 }
@@ -79,8 +85,9 @@ const DesktopNav = () => {
       </h2>
       <div className="h-full flex flex-col gap-2">
         <NavLinks links={_links} />
+        <PlaidLink variant="link"/>
         <div className="h-auto w-full grow rounded-md bg-background lg:block"/>
-        <SignOutForm>Sign Out</SignOutForm>
+        <SignOutForm />
       </div>
     </section>
   )
@@ -108,8 +115,9 @@ export function MobileNavSheet() {
         <Button variant="outline">MENU</Button>
       </SheetTrigger>
       <SheetContent>
-        <div className="h-full flex flex-col gap-2">
+        <div className="h-full flex flex-col gap-2 items-start">
           <NavLinks links={_links} />
+          <PlaidLink variant="link" className="w-full justify-start"/>
           <div className="h-auto w-full grow rounded-md bg-background lg:block"/>
           <SignOutForm>Sign Out</SignOutForm>
         </div>

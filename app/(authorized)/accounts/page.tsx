@@ -9,11 +9,11 @@ const Accounts = async ({}) => {
   const userDoc = await getSignedInUser();
   const accounts = await getAccounts(userDoc.$id)
   return (
-    <div className="flex flex-col md:py-8 overflow-y-auto gap-8">
+    <div className="flex flex-col gap-8 md:py-8 overflow-y-auto">
       <AppHeader title="Your Cards" className="mb-8"/>
       <div className="flex flex-wrap gap-4 justify-center md:justify-start">
         {accounts.map(account => (
-          <Card className="p-4">
+          <Card className="p-4 w-[390px]">
             <CreditCard
               bankName={account.name}
               mask={account.mask}
@@ -24,23 +24,6 @@ const Accounts = async ({}) => {
           </Card>
         ))}
       </div>
-      {/* <div className="flex flex-wrap gap-4 justify-center md:justify-start">
-        <Card className="p-4">
-          <CreditCard bankName={'Checking'} mask={'0000'} bankLink="test bank" className="aspect-video"/>
-        </Card>
-        <Card  className="p-4">
-          <CreditCard bankName={'Checking'} mask={'0000'} bankLink="test bank" className="aspect-video"/>
-        </Card>
-        <Card  className="p-4">
-          <CreditCard bankName={'Checking'} mask={'0000'} bankLink="test bank" className="aspect-video"/>
-        </Card>
-        <Card  className="p-4">
-          <CreditCard bankName={'Checking'} mask={'0000'} bankLink="test bank" className="aspect-video"/>
-        </Card>
-        <Card  className="p-4">
-          <CreditCard bankName={'Checking'} mask={'0000'} bankLink="test bank" className="aspect-video"/>
-        </Card>
-      </div> */}
     </div>
   )
 }
