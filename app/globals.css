@@ -66,6 +66,7 @@
     --red-1: 343, 84%, 58%;
     --red-2: 355, 90%, 58%;
     --red-3: 329, 70%, 44%;
+    --red-4: 343, 84%, 66%;
     --green-1: 142 88% 28%;
     --green-2: 139 65% 20%;
     --green-3: 140 74% 24%;
@@ -73,6 +74,7 @@
     --green-5: 141 40% 9%;
   }
 }
+html, body {margin:0;padding:0;height:100%;}
 /* Hide scrollbar for Chrome, Safari and Opera */
 .no-scrollbar::-webkit-scrollbar {
   display: none;
@@ -88,6 +90,22 @@
 }
 .gradient-background-2 {
   background: radial-gradient(circle at 100% 0%, #ee3a6d, transparent 60%),linear-gradient(65deg, #bf2273, #4c0519 50%);
+}
+.gradient-3 {
+  background-image: linear-gradient(to right top, #17060a, #290a11, #260910, #290a11, #17060a);
+}
+.hero-gradient {
+  background: linear-gradient(180deg, rgba(0,0,0,1) 0%, rgba(61,9,0,1) 60%, rgba(113,16,0,1) 76%, rgba(238,58,109,1) 100%);
+}
+.hero-ball {
+  /* background: radial-gradient(closest-side, #000 82%, rgba(113,16,0,1)); */
+  border: 1px solid rgba(238,58,109,1);
+  left: -50%;
+  width: 200%;
+}
+
+.box-shadow {
+  box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
 }
 @keyframes fadeIn {
   from { opacity: 0; }

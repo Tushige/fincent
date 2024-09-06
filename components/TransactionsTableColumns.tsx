@@ -54,7 +54,7 @@ export const columns: ColumnDef<Transaction>[] = [
   {
     accessorKey: "date",
     header: "Transaction Date",
-    cell: ({row}) => <span className="text-medium sm:text-lg">{row.getValue('date')}</span>
+    cell: ({row}) => <span className="text-sm lg:text-medium">{row.getValue('date')}</span>
   },
   columnHelper.accessor('category', {
     header: () => <div>Category</div>,

@@ -164,7 +164,7 @@ export const getTransactionsByBankId = async ({bankId}) => {
 export const getTransactionsByBank = async (bankId: string, cursor, offset) => {
   try {
     const bank = await getBankById(bankId)
-    const plaidTransactions = await _getPlaidTransactions(bank.accessToken, cursor)
+    const plaidTransactions = await _getPlaidTransactions(bank.accessToken, cursor, 5)
     const transferTransactions = await getTransferTransactionsByBankId(bankId, offset)
     const transactions = [...plaidTransactions.transactions, ...transferTransactions]
     transactions.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())

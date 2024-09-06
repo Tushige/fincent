@@ -1,8 +1,13 @@
 import { getSignedInUser } from "@/lib/actions/auth.actions";
-import {redirect} from 'next/navigation'
+import HomeUI from "@/components/HomeUI";
 
 export default async function Home() {
   const user = await getSignedInUser()
-  if (!user) redirect('/sign-in')
-  redirect('/dashboard')
+
+  return (
+    <section className="min-h-100vh">
+      <HomeUI user={user} />
+    </section>
+  )
 }
+

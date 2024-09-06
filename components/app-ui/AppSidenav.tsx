@@ -66,7 +66,7 @@ function SignOutForm(props: any) {
     <form action={signOut}>
       <button type="submit" className="w-full rounded-md flex flex-row gap-2 flex-start p-2 hover:bg-muted">
         <ArrowLeftEndOnRectangleIcon className="w-6 text-text"/>
-        Sign Out
+        <span className="text-text text-medium sm: text-lg">Sign Out</span>
       </button>
     </form>
   )
