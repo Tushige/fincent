@@ -11,6 +11,7 @@ import { useRef } from 'react';
 import { AppNavBar } from './app-ui/AppNavBar';
 import { HomeSectionTitle } from './home/HomeSectionTitle';
 import { HomeFeatures } from './home/HomeFeatures';
+import HomePricing from './home/HomePricing';
 export default function HomeUI({
   user
 }: {
@@ -22,6 +23,7 @@ export default function HomeUI({
       <Hero isSignedin={!!user} />
       <HomeFeatures />
       <ProductShowcase className="pt-16"/>
+      <HomePricing />
       <Footer />
     </>
   )
@@ -68,7 +70,20 @@ function Hero({isSignedin}) {
             animate={{opacity: 1, y: 0}}
             transition={{duration: 0.5}}
           >
-            Bank <span className="bg-gradient-to-r from-red-400 to-red-900 text-transparent bg-clip-text [-webkit-background-clip:text]">smarter</span>,<br/> 
+            Bank{' '}
+            <motion.span
+              animate={{
+                backgroundPositionX: "200%"
+              }}
+              transition={{
+                duration: 10,
+                repeat: Infinity,
+                ease: "linear",
+                repeatType: "loop"
+              }}
+              className="bg-[linear-gradient(to_right,#FFBE0F,#FFA45B,#FFDA77,#FFBE0F,#FFA45B,#FFDA77)] [background-size:200%] text-transparent bg-clip-text [-webkit-background-clip:text]">
+              smarter
+            </motion.span>,<br/> 
             Live <span className="bg-gradient-to-r from-fuchsia-300 to-red-900 text-transparent bg-clip-text [-webkit-background-clip:text]">Better</span>
           </motion.h1>
           <div className="flex flex-col md:flex-row gap-8 justify-center items-end">
@@ -86,14 +101,14 @@ function Hero({isSignedin}) {
               />
             </motion.div>
             <motion.p
-              className="text-center md:text-left text-xl mt-8"
+              className="text-center md:text-left text-xl mt-8 lg:max-w-[600px]"
               initial={{opacity: 0, x: 150}}
               animate={{opacity: 1, x: 0}}
               transition={{duration: 0.5, delay: 1}}
             >
-              We're redefining how you manage your money<br/>
-              with intuitive tools and cutting-edge technology.<br/>
-              Experience a new standard in personal finance with Fincent, <br/>
+              We're redefining how you manage your money
+              with intuitive tools and cutting-edge technology.
+              Experience a new standard in personal finance with Fincent,
               where your financial well-being is our top priority.
             </motion.p>
           </div>
@@ -103,8 +118,8 @@ function Hero({isSignedin}) {
               animate={{opacity: 1, y: 0}}
               transition={{duration: 0.5, delay: 1.5}}
             >
-              <Button className="bg-white text-black py-3 px-5 rounded-lg font-medium">
-                <Link href="/sign-up" className="font-medium">Get Started for Free</Link>
+              <Button className="mt-8 bg-[#5C2FC2] hover:bg-[#27174d] text-white hover:drop-shadow-xl">
+                <Link href="/sign-up">Get Started For Free</Link>
               </Button>
             </motion.div>
           </div>
@@ -145,12 +160,16 @@ function ProductShowcase({className}) {
   const rotateX = useTransform(scrollYProgress, [0, 1], [INITIAL_ROTATE_X, 0])
   const opacity = useTransform(scrollYProgress, [0, 1], [INITIAL_OPACITY, 1])
   return (
-    <div className={cn("bg-black text-white bg-gradient-to-b from-black to-[#FF204E] py-12", className)}>
+    <div className={cn("bg-black text-white bg-gradient-to-b from-black to-[#ff204d93] py-12", className)}>
       <div className="container">
         <div className="flex flex-col justify-center items-center gap-4">
           <HomeSectionTitle title="Intuitive UI" />
           <div className="flex flex-col items-center lg:items-start lg:flex-row lg:flex-row-reverse gap-8 mt-8">
-            <p className="lg:max-w-[400px] text-white/70 text-center lg:text-left">Discover unparalleled financial control with our cutting-edge personal banking app. Seamlessly track your spending with detailed expense breakdowns, effortlessly review your transaction history, and manage your finances with ease through secure fund transfers. Empower yourself with intuitive tools designed to simplify and enhance your banking experience</p>
+            <p className="lg:max-w-[400px] text-white/70 text-center lg:text-left">
+              Discover unparalleled financial control with our cutting-edge personal banking app.
+              Seamlessly track your spending with detailed expense breakdowns, effortlessly review your transaction history,
+              and manage your finances with ease through secure fund transfers. Empower yourself with intuitive tools designed to simplify and enhance your banking experience
+            </p>
             <motion.div
               style={{
                 opacity: opacity,

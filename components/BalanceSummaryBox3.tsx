@@ -43,9 +43,9 @@ export const BalanceSummaryBox3 = ({
         </Button>
       </CardHeader>
       <CardContent>
-        <div className="flex flex-col gap-4">
+        <div className="flex flex-col justify-center gap-4">
           <BalanceBox banks={banks}/>
-          <Carousel className="mt-8">
+          <Carousel className="mt-8 max-w-[500px] mx-auto">
             <CarouselContent>
               {
                 banks.map(bank => (

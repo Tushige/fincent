@@ -39,10 +39,11 @@ export function HomeFeatures() {
       <div className="container">
         <HomeSectionTitle title="What's Included" />
         <p className="text-center mt-5 text-xl text-white/70">Enjoy a quick overview of your expenses and income all in one place </p>
-        <div className="mt-16 flex flex-col sm:flex-row gap-4 rounded-lg">
+        <div
+          className="mt-16 flex flex-col sm:flex-row gap-4 rounded-lg"
+        >
           {
             features.map( ({title, description, icon, borderColor1, borderColor2}, idx) => {
-              const Icon = icon
               return (
                 <Feature
                   key={title}
@@ -92,7 +93,15 @@ function Feature({
   const y2 = useTransform(progress2, (val) => (pathRef.current?.getPointAtLength(val).y))
   const maskImage2 = useMotionTemplate`radial-gradient(100px 120px at ${x2}px ${y2}px, white, transparent)`;
   return (
-    <div className="flex flex-col items-center rounded-xl border border-white/30 px-5 py-10 text-center sm:flex-1 relative">
+    <motion.div
+      initial={{ rotate: 50, scale: 0.5, y: "100%"}}
+      whileInView={{rotate:0, scale: 1, y: '0%'}}
+      transition={{
+        type: 'spring',
+        bounce: 0.4,
+        duration: 0.8,
+      }}
+      className="grow-1 flex flex-col items-center rounded-xl border border-white/30 px-5 py-10 text-center sm:flex-1 relative">
       <div className="absolute inset-0 rounded-xl">
         <svg
           xmlns="http://www.w3.org/2000/svg"
@@ -124,6 +133,6 @@ function Feature({
       />
       <h3 className="mt-6 font-bold">{title}</h3>
       <p className="mt-2 text-white/70">{description}</p>
-    </div>
+    </motion.div>
   )
 }

@@ -5,7 +5,7 @@ export default async function Home() {
   const user = await getSignedInUser()
 
   return (
-    <section className="min-h-100vh">
+    <section className="min-h-100vh bg-black">
       <HomeUI user={user} />
     </section>
   )

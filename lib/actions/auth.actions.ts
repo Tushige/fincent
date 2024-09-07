@@ -113,7 +113,6 @@ export async function getSignedInUser() {
     const userDoc = await getUserByAuthUserId(authUser.$id)
     return userDoc;
   } catch (err) {
-    console.error(err)
     return null;
   }
 }
