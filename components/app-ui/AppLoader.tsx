@@ -4,7 +4,7 @@ import {motion} from 'framer-motion'
 
 const AppLoader = () => {
   return (
-    <div className="w-full h-[100vh] flex justify-center items-center">
+    <div className="w-full h-[calc(100vh-100px)] flex justify-center items-center">
       <motion.div
         className="w-[100px] h-[100px] bg-red-1"
         animate={{

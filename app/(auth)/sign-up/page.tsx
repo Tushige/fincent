@@ -17,10 +17,13 @@ const SignUpPage = () => {
     <div className="w-full">
       <AppNavBar isSignedin={false} className="bg-background"/>
       <section className="w-full mt-4 lg:mt-12 flex justify-center items-center">
-        <AuthCard className="w-[600px] container">
+        <AuthCard className="w-[600px] container py-8">
           <>
             <CardHeader className="px-0">
               <CardTitle>Create an Account</CardTitle>
+              <CardDescription className="py-4">
+                Already have an account? <Link href="/sign-in" className="underline text-foreground">Sign In</Link>
+              </CardDescription>
               <CardDescription>
                 Be sure to enter your legal name as it appears on your government-issued ID.
               </CardDescription>
@@ -28,11 +31,6 @@ const SignUpPage = () => {
             <CardContent className="p-0">
               <SignUpForm />
             </CardContent>
-            <CardFooter className="flex justify-between px-0 mt-4">
-              <CardDescription>
-                Already have an account? <Link href="/sign-in" className="underline">Sign In</Link>
-              </CardDescription>
-            </CardFooter>
           </>
         </AuthCard>
       </section>

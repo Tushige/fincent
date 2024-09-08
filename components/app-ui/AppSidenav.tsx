@@ -3,6 +3,7 @@ import React from 'react'
 import { cn } from '@/lib/utils'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
+import {Close} from '@radix-ui/react-dialog'
 import {
   HomeIcon,
   BuildingLibraryIcon,
@@ -21,9 +22,6 @@ import {
 } from '@heroicons/react/24/outline'
 
 import { AppLogo } from './AppLogo'
-import { signOut } from '@/lib/actions/auth.actions'
-import PlaidLink from '../PlaidLink'
-
 interface AppLink {
   label: string,
   href: string,
@@ -37,7 +35,7 @@ const _links = [
   {label: 'Connect Bank', href: '/link-banks', icon: LinkIcon}
 ]
 
-const NavLinks = ({links}: {links: AppLink[]}) => {
+const NavLinks = ({links, mobile}: {links: AppLink[], mobile?: boolean}) => {
   const pathname = usePathname()
   return (
     <nav className="w-full">
@@ -50,8 +48,19 @@ const NavLinks = ({links}: {links: AppLink[]}) => {
                 <Link href={link.href} className={cn('w-full flex h-[48px] grow items-center gap-2 rounded-md bg-background p-3 text-sm font-medium hover:bg-muted md:justify-center lg:justify-start lg:flex-none lg:p-2 lg:px-3', 
                   {'bg-muted ': pathname === link.href})
                 }>
-                  <LinkIcon className="w-6 text-text"/>
-                  <p className="block md:hidden lg:block text-text text-medium sm: text-lg">{link.label}</p>
+                  {
+                    mobile ? (
+                      <Close className="disabled:pointer-events-none w-full flex flex-row gap-4">
+                        <LinkIcon className="w-6 text-text"/>
+                        <p className="block md:hidden lg:block text-text text-lg w-full text-left">{link.label}</p>
+                      </Close>
+                    ) : (
+                      <>
+                        <LinkIcon className="w-6 text-text"/>
+                        <p className="block md:hidden lg:block text-text text-lg">{link.label}</p>
+                      </>
+                    )
+                  }
                 </Link>
               </li>
             )
@@ -68,12 +77,6 @@ function SignOutForm(props: any) {
       <ArrowLeftEndOnRectangleIcon className="w-6 text-text"/>
       <Link href="/sign-out" className="text-text text-medium sm: text-lg">Sign Out</Link>
     </button>
-    // <form action={signOut}>
-    //   <button type="submit" className="w-full rounded-md flex flex-row gap-2 flex-start p-2 hover:bg-muted">
-    //     <ArrowLeftEndOnRectangleIcon className="w-6 text-text"/>
-    //     <span className="text-text text-medium sm: text-lg">Sign Out</span>
-    //   </button>
-    // </form>
   )
 }
 /**
@@ -93,7 +96,6 @@ const DesktopNav = () => {
       <div className="h-full flex flex-col gap-2">
         <NavLinks links={_links} />
         <div className="h-auto w-full grow rounded-md bg-background lg:block"/>
-        
         <SignOutForm />
       </div>
     </section>
@@ -102,29 +104,28 @@ const DesktopNav = () => {
 
 const MobileNav = () => {
   return (
-    <section className="w-full h-full flex flex-grow px-3 py-4 justify-between">
-      <h2 className="flex items-center gap-2">
-        <AppLogo />
-        <span className="">FINCENT</span>
-      </h2>
-      <div className="h-full flex flex-col gap-2">
-       <MobileNavSheet/>
-      </div>
+    <section className="container w-full h-[100px] flex flex-grow justify-between items-center">
+      <Link href="/">
+        <h2 className="flex items-center gap-2">
+          <AppLogo />
+          <span className="">FINCENT</span>
+        </h2>
+      </Link>
+      <MobileNavSheet/>
     </section>
   )
 }
 
 
-export function MobileNavSheet() {
+function MobileNavSheet() {
   return (
     <Sheet>
-      <SheetTrigger asChild>
+      <SheetTrigger asChild className="">
         <Button variant="outline">MENU</Button>
       </SheetTrigger>
       <SheetContent>
         <div className="h-full flex flex-col gap-2 items-start">
-          <NavLinks links={_links} />
-          <PlaidLink variant="link" className="w-full justify-start"/>
+          <NavLinks links={_links} mobile/>
           <div className="h-auto w-full grow rounded-md bg-background lg:block"/>
           <SignOutForm />
         </div>
