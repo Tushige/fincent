@@ -27,7 +27,7 @@ const Page = async () => {
   const fullName = `${userDoc.firstName} ${userDoc.lastName}`
 
   return (
-    <section className="flex flex-col pb-8 md:py-8 overflow-y-auto gap-8">
+    <section className="flex flex-col pb-[100px] md:py-8 overflow-y-auto gap-8">
       <AppHeader title={`Hello, ${fullName}!`} subText="" className="mb-8"/>
       <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-3 xl:gap-8">
         <div className="grid grid-cols-1 gap-4 xl:col-span-2">

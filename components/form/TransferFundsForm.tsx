@@ -88,7 +88,7 @@ const TransferFundsForm = ({accounts}: {
             control={form.control}
             name="memo"
             render={({field}) => (
-              <FormItem className="mt-2">
+              <FormItem className="mt-8">
                 <FormLabel>Memo (Optional)</FormLabel>
                 <FormControl>
                   <Textarea

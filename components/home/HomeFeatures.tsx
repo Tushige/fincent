@@ -37,13 +37,13 @@ const features = [
 export function HomeFeatures() {
   const staggerItems = stagger(0.5, { startDelay: 0.15 });
   return (
-    <div className="bg-black py-8 relative overflow-hidden">
+    <div className="container bg-black py-8 relative overflow-hidden">
       <Meteors number={30} />
       <div className="container">
         <HomeSectionTitle title="What's Included" />
         <p className="text-center mt-5 text-xl text-white/70">Enjoy a quick overview of your expenses and income all in one place </p>
         <div
-          className="mt-16 flex flex-col gap-8 sm:flex-row sm:gap-4 rounded-lg"
+          className="mt-16 flex flex-col gap-8 md:flex-row md:gap-4 rounded-lg"
         >
           {
             features.map( ({title, description, icon, borderColor1, borderColor2}, idx) => {
