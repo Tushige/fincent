@@ -1,5 +1,5 @@
 'use client'
-import React, { useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState } from 'react'
 import TestTransactionTable from '@/components/TestTransactionTable';
 import SelectAccount from '@/components/SelectAccount';
 import { getTransactionsByBank } from '@/lib/actions/plaid/plaid.actions';
@@ -20,7 +20,7 @@ const TransactionHistoryClientUI = ({
   const [previousCursors, setPreviousCursors] = useState([])
   const [hasMore, setHasMore] = useState(true)
 
-  const fetchTransactions = async (cursor) => {
+  const fetchTransactions = useCallback(async (cursor) => {
     setTableLoading(true)
     try {
       const transactions = await getTransactionsByBank(bankId, cursor, 10);
@@ -34,10 +34,10 @@ const TransactionHistoryClientUI = ({
       setTableLoading(false)
       setLoading(false)
     }
-  }
+  }, [bankId])
   useEffect(() => {
     fetchTransactions(null)
-  }, [bankId])
+  }, [bankId, fetchTransactions])
 
   const handleNext = () => {
     fetchTransactions(nextCursor)

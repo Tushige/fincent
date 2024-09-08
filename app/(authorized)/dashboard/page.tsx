@@ -5,12 +5,19 @@ import { getAccounts, getAllTransactions, getBankIncome, getTransactionsByBank }
 import RecentTransactions from '@/components/RecentTransactions';
 import { CashFlowChartArea } from '@/components/CashFlowChartArea';
 import { TopCategories } from '@/components/TopCategories';
+import NoData from '@/components/NoData';
+import { redirect } from 'next/navigation';
 
 const Page = async () => {
   const userDoc = await getSignedInUser();
-  // TODO - figure out a way to remove this call because getTransactions returns accounts data anyways. So this is redundant.
+  if (!userDoc) {
+    redirect('/')
+  }
   const accounts = await getAccounts(userDoc.$id)
-  const transactions =  await getTransactionsByBank(accounts[0].bankId, null, 0)
+  if (!accounts || accounts.length < 1) {
+    return <NoData />
+  }
+  const transactions =  await getTransactionsByBank(accounts[0].bankId, null, 0) || []
   const allTransactions = await getAllTransactions(userDoc.$id)
   const banks = accounts?.map(account => ({
     name: account.name,
@@ -20,12 +27,16 @@ const Page = async () => {
   const fullName = `${userDoc.firstName} ${userDoc.lastName}`
 
   return (
-    <section className="flex flex-col md:py-8 overflow-y-auto gap-8">
+    <section className="flex flex-col pb-8 md:py-8 overflow-y-auto gap-8">
       <AppHeader title={`Hello, ${fullName}!`} subText="" className="mb-8"/>
       <div className="grid grid-cols-1 items-start gap-4 xl:grid-cols-3 xl:gap-8">
         <div className="grid grid-cols-1 gap-4 xl:col-span-2">
           <div className="flex flex-col gap-8">
-            <CashFlowChartArea className="min-w-64" income={income} expense={allTransactions?.categorizedTransactions}/>
+            <CashFlowChartArea
+              className="min-w-64"
+                income={income}
+                expense={allTransactions?.categorizedTransactions}
+              />
             <RecentTransactions transactions={transactions.transactions} />
           </div>
         </div>

@@ -55,7 +55,7 @@ export function AppBarMixedChart({
             layout="vertical"
             margin={{
               right: 25,
-              left: 0
+              left: 10
             }}
           >
             <YAxis

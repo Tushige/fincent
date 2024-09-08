@@ -1,10 +1,13 @@
 'use client'
-import React from 'react'
+import React, { startTransition, useState } from 'react'
 import { zodResolver } from "@hookform/resolvers/zod"
 import { useForm } from "react-hook-form"
 import {z} from 'zod'
 import {signUpFormSchema} from './utils'
 import { Button } from "@/components/ui/button"
+import {
+  ExclamationCircleIcon
+} from '@heroicons/react/24/outline'
 import {
   Form,
   FormControl,
@@ -25,7 +28,8 @@ import {
 } from "@/components/ui/select"
 import { AppFormInput } from '../app-ui/AppFormInput'
 import {signUpWithEmail} from '@/lib/actions/auth.actions'
-import { AppDatePicker } from '../app-ui/AppDatepicker'
+import { useRouter } from 'next/navigation'
+import { useProgress } from 'react-transition-progress'
 
 const STATES = [
   {label: 'Alabama', value: 'AL'},
@@ -81,6 +85,9 @@ const STATES = [
   {value: 'WY', label: 'Wyoming'}
 ]
 export const SignUpForm = () => {
+  const router = useRouter();
+  const [loading, setLoading] = useState(false)
+  const [error, setError] = useState(false)
   const formSchema = signUpFormSchema();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
@@ -100,9 +107,19 @@ export const SignUpForm = () => {
     },
   })
   const {control, handleSubmit, formState} = form;
-  
+  const startProgress = useProgress()
   const onSubmit= async (data: z.infer<typeof formSchema>) => {
-    await signUpWithEmail(data)
+    setLoading(true)
+    startTransition(async () => {
+      startProgress()
+      const user = await signUpWithEmail(data)
+      if (user) {
+        router.push(`/link-banks?userId${user.$id}`)
+      } else {
+        setError(true)
+        setLoading(false)
+      }
+    })
   }
 
 
@@ -130,14 +147,14 @@ export const SignUpForm = () => {
               <FormItem className="w-full" key={field.value}>
                 <FormLabel>State</FormLabel>
                 <Select onValueChange={field.onChange} defaultValue={field.value}>
-                  <SelectTrigger className="w-[180px]">
+                  <SelectTrigger className="w-[180px] mt-2">
                     <SelectValue placeholder="Select a State" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectGroup>
                       <SelectLabel>States</SelectLabel>
                       {STATES.map(({value, label}) => (
-                        <SelectItem value={value}>{label}</SelectItem>
+                        <SelectItem key={value} value={value}>{label}</SelectItem>
                       ))}
                     </SelectGroup>
                   </SelectContent>
@@ -165,7 +182,21 @@ export const SignUpForm = () => {
             </FormItem>
           )}
         />
-        <Button type="submit" className="mt-10">Create Account</Button>
+        <Button type="submit" className="mt-10">
+          {
+            loading ? (
+              'Loading'
+            ) : 'Create Account'
+          }
+        </Button>
+        {
+          error ? (
+            <div className="flex flex-row gap-4 items-start">
+              <ExclamationCircleIcon className="w-6 text-red-1"/>
+              <p className="text-red-1 text-sm">Something went wrong. Please try again</p>
+            </div>
+          ) : null
+        }
       </form>
     </Form>
   )

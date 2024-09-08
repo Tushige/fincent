@@ -5,19 +5,19 @@ import React from 'react'
 import { useCopyToClipboard } from './hooks/useCopyToClipboard'
 import { useToast } from './hooks/use-toast'
 import {
-  CheckCircleIcon,
   ClipboardDocumentIcon
 } from '@heroicons/react/24/outline'
 
 declare interface CreditCardProps {
   bankName: string,
-  fullName: string,
-  mask: string
+  bankLink: string,
+  mask: string,
+  className: string,
+  addCopyLink: boolean
 }
 
 export const CreditCard = ({
   bankName,
-  fullName,
   mask,
   bankLink,
   className,

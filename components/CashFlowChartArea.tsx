@@ -60,7 +60,7 @@ export function CashFlowChartArea({
   income,
   expense,
   className,
-}: {className: string}) {
+}: {className?: string, income: any, expense: any}) {
   return (
     <Card>
       <CardHeader>
@@ -133,15 +133,6 @@ export function CashFlowChartArea({
           </AreaChart>
         </ChartContainer>
       </CardContent>
-      <CardFooter>
-        <div className="flex w-full items-start gap-2 text-sm">
-          <div className="grid gap-2">
-            <div className="flex items-center gap-2 leading-none text-muted-foreground">
-              January - June 2024
-            </div>
-          </div>
-        </div>
-      </CardFooter>
     </Card>
   )
 }

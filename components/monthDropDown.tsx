@@ -25,7 +25,7 @@ export function MonthDropDown({options, selected, onSelect}) {
         <DropdownMenuRadioGroup value={selected} onValueChange={onSelect}>
           {
             options.map(option => (
-              <DropdownMenuRadioItem value={option}>{option}</DropdownMenuRadioItem>
+              <DropdownMenuRadioItem key={option} value={option}>{option}</DropdownMenuRadioItem>
             ))
           }
         </DropdownMenuRadioGroup>

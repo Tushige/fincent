@@ -12,7 +12,7 @@ export function AppNavBar({isSignedin, className}) {
     <div className={cn("py-4", className)}>
       <div className="container flex flex-row justify-between items-center">
         <h1 className="flex flex-row gap-2 items-end text-2xl font-black ">
-          <Image src={'/letter-f.png'} width={48} height={48}/>
+          <Image src={'/letter-f.png'} width={48} height={48} alt="company logo"/>
           <Link href="/" className="cursor-pointer">Fincent</Link>
         </h1>
         {

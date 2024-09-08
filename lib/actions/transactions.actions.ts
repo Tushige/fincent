@@ -81,7 +81,7 @@ const getTransferTransactionsByBankId = async (bankId: string, offset: number = 
         memo: transaction.memo,
         amount: isOutgoing ? -transaction.amount : transaction.amount,
         date,
-        paymentChannel: transaction.channel,
+        payment_channel: transaction.channel,
         category: transaction.category,
         status: transaction.status,
         pending: transaction.status === PENDING

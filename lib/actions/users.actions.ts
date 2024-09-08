@@ -1,7 +1,8 @@
 import { Query } from "node-appwrite";
 import { createAdminClient } from "../server/appwrite"
+import { User } from "@/types";
 
-export const getUserByAuthUserId = async (id: string) => {
+export const getUserByAuthUserId = async (id: string): Promise<User | null> => {
   try {
     const { database } = await createAdminClient();
     const userDoc = await database.listDocuments(
@@ -15,6 +16,7 @@ export const getUserByAuthUserId = async (id: string) => {
     return userDoc.documents[0]
   } catch (err) {
     console.error(err)
+    return null;
   }
 }
 

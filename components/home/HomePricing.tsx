@@ -32,7 +32,7 @@ export default function HomePricing({className}) {
           <div className="mt-8 pb-8">
             {
               data.map(({title, description, price, features}) => (
-                <PricingCard title={title} description={description} price={price} features={features}/>
+                <PricingCard key={title} title={title} description={description} price={price} features={features}/>
               ))
             }
           </div>
@@ -70,7 +70,7 @@ function PricingCard({
     if (isInView) {
       runSequence();
     }
-  }, [isInView])
+  }, [isInView, priceVal])
   const price = useTransform(priceVal, (val) => {
     return Math.round(val)
   })

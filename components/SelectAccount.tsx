@@ -26,7 +26,7 @@ const SelectAccount = ({
     <SelectContent>
       {
         accounts.map(account => (
-          <SelectItem value={account.bankId}>
+          <SelectItem value={account.bankId} key={account.bankId}>
             {account.name}
           </SelectItem>
         ))

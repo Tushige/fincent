@@ -1,5 +1,6 @@
 'use client'
-import React, { useMemo } from 'react'
+import React, { useEffect, useRef } from 'react'
+import {animate, motion, useMotionValue, useTransform} from 'framer-motion'
 import { Chart as ChartJS, ArcElement, Tooltip, Legend } from "chart.js";
 import { Doughnut } from "react-chartjs-2";
 import { Card, CardContent, CardHeader, CardTitle } from './ui/card'
@@ -45,19 +46,21 @@ export const BalanceSummaryBox3 = ({
       <CardContent>
         <div className="flex flex-col justify-center gap-4">
           <BalanceBox banks={banks}/>
-          <Carousel className="mt-8 max-w-[500px] mx-auto">
-            <CarouselContent>
-              {
-                banks.map(bank => (
-                  <CarouselItem key={bank.id}>
-                    <CreditCard bankName={bank.name} mask={bank.mask}/>
-                  </CarouselItem>
-                ))
-              }
-            </CarouselContent>
-            <CarouselPrevious className="top-[-25px] left-[0px]" />
-            <CarouselNext className="top-[-25px] right-[0px]"/>
-          </Carousel>
+          <div className="w-full flex justify-center items-center">
+            <Carousel className="mt-8 min-w-[350px] md:min-w-0 md:grow max-w-[500px]">
+              <CarouselContent>
+                {
+                  banks.map(bank => (
+                    <CarouselItem key={bank.id}>
+                      <CreditCard bankName={bank.name} mask={bank.mask}/>
+                    </CarouselItem>
+                  ))
+                }
+              </CarouselContent>
+              <CarouselPrevious className="top-[-25px] left-[0px]" />
+              <CarouselNext className="top-[-25px] right-[0px]"/>
+            </Carousel>
+          </div>
         </div>
       </CardContent>
     </Card>
@@ -70,7 +73,19 @@ function BalanceBox({
 }: {
   banks: Bank[]
 }) {
-  const totalBalanceAmount = useMemo(() => banks.reduce((curr, bank) => curr + bank.balance, 0), [banks])
+  const totalAmountValue = useMotionValue(0)
+  const balanceRef = useRef(null)
+  useEffect(() => {
+    const total = banks.reduce((curr, bank) => curr + bank.balance, 0)
+    const node = balanceRef.current
+    animate(totalAmountValue, total, {
+      duration: 3,
+      onUpdate: (latest) => {
+        node.textContent = formatUSD(Math.round(latest))
+      }
+    })
+  }, [banks, totalAmountValue])
+  const totalAmount = useTransform(totalAmountValue, Math.round)
   const data = {
     labels: banks.map(bank => bank.name),
     datasets: [{
@@ -87,9 +102,13 @@ function BalanceBox({
         </CardTitle>
       </CardHeader>
       <CardContent>
-        <div className="font-black text-4xl">
-          {formatUSD(totalBalanceAmount)}
-        </div>
+        <motion.div
+          className="font-black text-4xl"
+          ref={balanceRef}
+        >
+          {/* {formatUSD(totalAmount.current)}
+          {formatUSD(totalAmount.current)} */}
+        </motion.div>
         <div className="w-full h-full flex items-center justify-center">
           <div className="w-[200px] h-[200px] md:mt-8">
             <Doughnut

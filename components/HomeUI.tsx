@@ -12,6 +12,7 @@ import { AppNavBar } from './app-ui/AppNavBar';
 import { HomeSectionTitle } from './home/HomeSectionTitle';
 import { HomeFeatures } from './home/HomeFeatures';
 import HomePricing from './home/HomePricing';
+import Ripple from './magicui/ripple';
 export default function HomeUI({
   user
 }: {
@@ -51,8 +52,8 @@ function Hero({isSignedin}) {
   const opacity = useTransform(scrollYProgress, [0, 1], [1, 0])
   const y = useTransform(scrollYProgress, [0, 1], [0, -50])
   return (
-    <div ref={containerRef} className="bg-black text-white hero-gradient py-4 h-[calc(100vh-50px)] relative overflow-hidden">
-      <AppNavBar isSignedin={isSignedin}/>
+    <div ref={containerRef} className="bg-black text-white hero-gradient py-4 pt-0 h-[calc(100vh-50px)] relative overflow-hidden">
+      {/* <AppNavBar isSignedin={isSignedin} className="py-4 bg-transparent bg-[linear-gradient(to_bottom,black,#270a11)]" /> */}
       <div className="absolute aspect-square rounded-[100%] bg-black 
         bg-[radial-gradient(closest-side,#000_82%,#711000)] hero-ball top-[70%]
         2xl:bg-[radial-gradient(closest-side,#000_90%,#711000)]
@@ -62,10 +63,11 @@ function Hero({isSignedin}) {
         min-[2000px]:top-[55%]
       "
       />
-      <div className="container relative">
-        <div className="flex flex-col justify-center align-items">
+      <div className="relative">
+        <AppNavBar isSignedin={isSignedin} className="py-4 bg-transparent z-10 relative" />
+        <div className="mt-[100px] md:mt-6 lg:mt-0 flex flex-col justify-center align-items z-10 relative">
           <motion.h1
-            className="grow text-7xl lg:text-9xl font-bold tracking-tighter text-center mt-8"
+            className="grow text-6xl md:text-7xl lg:text-9xl font-bold tracking-tighter text-center mt-8"
             initial={{opacity: 0, y: -100}}
             animate={{opacity: 1, y: 0}}
             transition={{duration: 0.5}}
@@ -86,12 +88,12 @@ function Hero({isSignedin}) {
             </motion.span>,<br/> 
             Live <span className="bg-gradient-to-r from-fuchsia-300 to-red-900 text-transparent bg-clip-text [-webkit-background-clip:text]">Better</span>
           </motion.h1>
-          <div className="flex flex-col md:flex-row gap-8 justify-center items-end">
+          <div className="px-8 flex flex-col md:flex-row gap-8 justify-center items-end">
             <motion.div
               className="flex-none hidden md:block"
               initial={{opacity: 0, x: -50}}
               animate={{opacity: 1, x: 0}}
-              transition={{duration: 0.5, delay: 0.5}}
+              transition={{duration: 0.5, delay: 0.3}}
             >
               <Image
                 src="/pie-chart.png"
@@ -101,12 +103,12 @@ function Hero({isSignedin}) {
               />
             </motion.div>
             <motion.p
-              className="text-center md:text-left text-xl mt-8 lg:max-w-[600px]"
+              className="text-center md:text-left text-medium lg:text-xl mt-8 lg:max-w-[600px]"
               initial={{opacity: 0, x: 150}}
               animate={{opacity: 1, x: 0}}
-              transition={{duration: 0.5, delay: 1}}
+              transition={{duration: 0.5, delay: 0.5}}
             >
-              We're redefining how you manage your money
+              We&apos;re redefining how you manage your money
               with intuitive tools and cutting-edge technology.
               Experience a new standard in personal finance with Fincent,
               where your financial well-being is our top priority.
@@ -116,7 +118,7 @@ function Hero({isSignedin}) {
             <motion.div
               initial={{opacity: 0, y: 150}}
               animate={{opacity: 1, y: 0}}
-              transition={{duration: 0.5, delay: 1.5}}
+              transition={{duration: 0.5, delay: 1}}
             >
               <Button className="mt-8 bg-[#5C2FC2] hover:bg-[#27174d] text-white hover:drop-shadow-xl">
                 <Link href="/sign-up">Get Started For Free</Link>
@@ -124,6 +126,7 @@ function Hero({isSignedin}) {
             </motion.div>
           </div>
         </div>
+        <Ripple />
       </div>
         <motion.div
           className="absolute bottom-[100px] left-[50%] -translate-x-1/2"
@@ -142,7 +145,7 @@ function Hero({isSignedin}) {
               y: y
             }}
           >
-          <ChevronDoubleDownIcon width={64} height={64} alt="chevron-down icon" className=""/>
+          <ChevronDoubleDownIcon width={64} height={64} alt="chevron-down icon" className="text-white/30"/>
         </motion.div>
       </motion.div>
     </div>
@@ -178,7 +181,7 @@ function ProductShowcase({className}) {
               }}
               className="bg-gradient-to-r from-fuchsia-800 to-red-500 rounded-lg overflow-hidden p-4"
             >
-              <Image ref={imageRef} src="/Desktop.png" width={500} height={500} className="box-shadow" />
+              <Image ref={imageRef} src="/Desktop.png" width={500} height={500} className="box-shadow" alt="product screenshot" />
            </motion.div>
           </div>
         </div>

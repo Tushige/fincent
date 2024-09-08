@@ -1,13 +1,14 @@
 'use client'
-import { motion, useAnimationFrame, useMotionTemplate, useMotionValue, useTransform } from "framer-motion"
+import { animate, motion, stagger, useAnimationFrame, useInView, useMotionTemplate, useMotionValue, useTransform } from "framer-motion"
 import { HomeSectionTitle } from "./HomeSectionTitle"
 import {
   PaperAirplaneIcon,
   CurrencyDollarIcon,
   BookOpenIcon
 } from '@heroicons/react/24/outline'
-import { useRef } from "react"
+import { useEffect, useRef } from "react"
 import { cn } from "@/lib/utils"
+import Meteors from "../magicui/meteors"
 
 const features = [
   {
@@ -34,19 +35,23 @@ const features = [
 ]
 
 export function HomeFeatures() {
+  const staggerItems = stagger(0.5, { startDelay: 0.15 });
   return (
-    <div className="bg-black py-8">
+    <div className="bg-black py-8 relative overflow-hidden">
+      {/* <Meteors number={30} /> */}
       <div className="container">
         <HomeSectionTitle title="What's Included" />
         <p className="text-center mt-5 text-xl text-white/70">Enjoy a quick overview of your expenses and income all in one place </p>
         <div
-          className="mt-16 flex flex-col sm:flex-row gap-4 rounded-lg"
+          className="mt-16 flex flex-col gap-8 sm:flex-row sm:gap-4 rounded-lg"
         >
           {
             features.map( ({title, description, icon, borderColor1, borderColor2}, idx) => {
               return (
                 <Feature
                   key={title}
+                  staggerItems={staggerItems}
+                  idx={idx}
                   title={title}
                   description={description}
                   Icon={icon}
@@ -67,12 +72,16 @@ function Feature({
   title,
   description,
   Icon,
+  idx,
+  staggerItems,
   duration = 5000,
   position = 0,
   borderColor1 = 'border-fuchsia-500',
   borderColor2 = 'border-fuchsia-900'
 }) {
   const pathRef = useRef(null)
+  const enterContainerRef = useRef(null)
+  const isInView = useInView(enterContainerRef)
   const progress = useMotionValue<number>(position)  
   const progress2 = useMotionValue<number>(position)
   const border = useRef<HTMLDivElement>(null)
@@ -85,6 +94,21 @@ function Feature({
       progress2.set( ((time * pxPerMillisecond) + length/2) % length )
     }
   })
+  useEffect(() => {
+    if (isInView) {
+      animate(enterContainerRef.current, {
+        opacity: 1,
+        scale: 1,
+        rotate: 0,
+        y: "0%"
+      }, {
+        duration : 0.5,
+        type: 'spring',
+        bounce: 0.4,
+        delay: idx * 0.1
+      })
+    }
+  }, [isInView, idx])
   const x = useTransform(progress, (val) => pathRef.current?.getPointAtLength(val).x)
   const y = useTransform(progress, (val) => pathRef.current?.getPointAtLength(val).y)
   const maskImage = useMotionTemplate`radial-gradient(100px 120px at ${x}px ${y}px, black, transparent)`;
@@ -94,13 +118,8 @@ function Feature({
   const maskImage2 = useMotionTemplate`radial-gradient(100px 120px at ${x2}px ${y2}px, white, transparent)`;
   return (
     <motion.div
-      initial={{ rotate: 50, scale: 0.5, y: "100%"}}
-      whileInView={{rotate:0, scale: 1, y: '0%'}}
-      transition={{
-        type: 'spring',
-        bounce: 0.4,
-        duration: 0.8,
-      }}
+      ref={enterContainerRef}
+      initial={{ rotate: 20, scale: 0.5, y: "50%", opacity: 0.3}}
       className="grow-1 flex flex-col items-center rounded-xl border border-white/30 px-5 py-10 text-center sm:flex-1 relative">
       <div className="absolute inset-0 rounded-xl">
         <svg

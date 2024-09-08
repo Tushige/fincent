@@ -5,7 +5,7 @@ import { revalidatePath } from "next/cache";
 import { createBankAccount, getBankByAccountId, getBankById, getBanksByUserId } from "../banks.actions";
 import { addFundingSource } from "../../server/dwolla";
 import { CATEGORIES_SET, monthIdxToMonthLabel, parseIntoMonthlyIncome } from "@/lib/utils";
-import { Account } from "node-appwrite";
+import {Account, User} from '@/types'
 import { getTransferTransactionsByBankId } from "../transactions.actions";
 
 export async function linkTokenCreateAction({userId, clientName} : {userId: string, clientName: string}) {
@@ -82,7 +82,7 @@ export const exchangeToken = async (
  * Observations:
  * - each account in the accounts list belong to a different bank.
  */
-export const getAccounts = async (userId: string) => {
+export const getAccounts = async (userId: string): Promise<Account[]> => {
   try {
     const banks = await getBanksByUserId(userId)
     const accounts = await Promise.all(banks?.map(async (bank: Bank) => {
@@ -99,12 +99,13 @@ export const getAccounts = async (userId: string) => {
         type: d.type,
         bankId: bank.$id,
         shareableId: bank.shareableId
-      }
+      } as Account
       return account
     }))
     return accounts;
   } catch (err) {
     console.error(err)
+    return [];
   }
 }
 
@@ -215,7 +216,7 @@ export const getBankIncome = async (userDoc: User) => {
       },
     }; 
     const res = await plaidClient.creditBankIncomeGet(incomeReq)
-    const historicalData = res.data.bank_income[0].bank_income_summary?.historical_summary
+    const historicalData = res?.data?.bank_income[0].bank_income_summary?.historical_summary
     const monthlyIncome = parseIntoMonthlyIncome(historicalData)
     return monthlyIncome
   } catch (err) {
@@ -275,7 +276,7 @@ async function _getPlaidTransactions(accessToken: string, cursor: string | null,
         pending: d.pending,
         merchant_name: d.merchant_name,
         name: d.name,
-        paymentChannel: d.payment_channel,
+        payment_channel: d.payment_channel,
         logo_url: d.logo_url,
         date: d.date,
       }))

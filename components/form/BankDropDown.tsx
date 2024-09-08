@@ -29,7 +29,7 @@ export function BankDropDown({
           <SelectLabel>Please select where you want to transfer funds from</SelectLabel>
           {
             options.map ((option: Account) => (
-              <SelectItem value={option.bankId}>{option.officialName}</SelectItem>
+              <SelectItem key={option.bankId} value={option.bankId}>{option.officialName}</SelectItem>
             ))
           }
         </SelectGroup>

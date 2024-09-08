@@ -3,8 +3,12 @@ import Link from 'next/link'
 import TransactionsTable from './TransactionsTable'
 import { columns } from './TransactionsTableColumns'
 import { Card, CardTitle, CardContent, CardHeader } from './ui/card'
+import { Account, Transaction } from '@/types'
 
-const RecentTransactions = ({accounts, transactions}) => {
+const RecentTransactions = ({accounts, transactions}: {
+  accounts: Account[],
+  transactions: Transaction[]
+}) => {
   return (
     <Card>
       <CardHeader className="flex flex-row justify-between">

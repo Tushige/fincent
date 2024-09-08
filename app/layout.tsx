@@ -3,8 +3,6 @@ import { Inter, IBM_Plex_Serif, Urbanist } from "next/font/google";
 import {ProgressBar, ProgressBarProvider} from 'react-transition-progress'
 import "./globals.css";
 import { cn } from "@/lib/utils";
-import { Suspense } from "react";
-import AppLoader from "@/components/app-ui/AppLoader";
 
 const inter = Inter({ subsets: ["latin"], variable: '--font-inter' });
 const ibmPlexSerif = IBM_Plex_Serif({

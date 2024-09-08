@@ -1,5 +1,5 @@
 'use client'
-import React, { useCallback } from 'react'
+import React, { useCallback, useState } from 'react'
 import {
   usePlaidLink,
   PlaidLinkOnSuccessMetadata,
@@ -11,26 +11,38 @@ import {
   LinkIcon
 } from '@heroicons/react/24/outline'
 import { cn } from '@/lib/utils';
+import AppLoader from './app-ui/AppLoader';
 const PlaidLink = ({
   user,
   token,
   variant = 'primary',
   className
 }: PlaidLinkProps) => {
+  const [loading, setLoading] = useState(false)
   const router = useRouter();
   const config = {
-    onSuccess: useCallback(onSuccessHandler, [user]),
+    onSuccess: useCallback(onSuccessHandler, [user, router]),
     token
   }
   const {open, ready} = usePlaidLink(config);
 
   async function onSuccessHandler(publicToken: string, metadata: PlaidLinkOnSuccessMetadata) {
-    await exchangeToken(
-      publicToken,
-      user
-    )
-    router.push(`/dashboard`)
+    try {
+      setLoading(true)
+      await exchangeToken(
+        publicToken,
+        user
+      )
+      setLoading(false)
+    } catch (err) {
+      console.error(err)
+    } finally {
+      router.push(`/dashboard`)
+    }
   } 
+  if (loading) {
+    return <AppLoader />
+  }
   switch(variant) {
     case 'primary':
       return (

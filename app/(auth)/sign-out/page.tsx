@@ -1,8 +1,9 @@
 'use client'
 import { useEffect } from "react"
 import { signOut } from "@/lib/actions/auth.actions"
+import AppLoader from "@/components/app-ui/AppLoader";
 
-export default async function Page() {
+export default function Page() {
   useEffect(() => {
     async function out() {
       await signOut();
@@ -10,6 +11,6 @@ export default async function Page() {
     out();
   }, [])
   return (
-    <></>
+    <AppLoader />
   )
 }

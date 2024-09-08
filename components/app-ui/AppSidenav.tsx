@@ -33,7 +33,8 @@ const _links = [
   {label: 'Dashboard', href: '/dashboard', icon: HomeIcon},
   {label: 'My Banks', href: '/accounts', icon: BuildingLibraryIcon},
   {label: 'Transaction History', href: '/transaction-history', icon: DocumentTextIcon},
-  {label: 'Transfer Funds', href: '/transfer-funds', icon: BanknotesIcon}
+  {label: 'Transfer Funds', href: '/transfer-funds', icon: BanknotesIcon},
+  {label: 'Connect Bank', href: '/link-banks', icon: LinkIcon}
 ]
 
 const NavLinks = ({links}: {links: AppLink[]}) => {
@@ -63,12 +64,16 @@ const NavLinks = ({links}: {links: AppLink[]}) => {
 
 function SignOutForm(props: any) {
   return (
-    <form action={signOut}>
-      <button type="submit" className="w-full rounded-md flex flex-row gap-2 flex-start p-2 hover:bg-muted">
-        <ArrowLeftEndOnRectangleIcon className="w-6 text-text"/>
-        <span className="text-text text-medium sm: text-lg">Sign Out</span>
-      </button>
-    </form>
+    <button type="submit" className="w-full rounded-md flex flex-row gap-2 flex-start p-2 hover:bg-muted">
+      <ArrowLeftEndOnRectangleIcon className="w-6 text-text"/>
+      <Link href="/sign-out" className="text-text text-medium sm: text-lg">Sign Out</Link>
+    </button>
+    // <form action={signOut}>
+    //   <button type="submit" className="w-full rounded-md flex flex-row gap-2 flex-start p-2 hover:bg-muted">
+    //     <ArrowLeftEndOnRectangleIcon className="w-6 text-text"/>
+    //     <span className="text-text text-medium sm: text-lg">Sign Out</span>
+    //   </button>
+    // </form>
   )
 }
 /**
@@ -79,14 +84,16 @@ function SignOutForm(props: any) {
 const DesktopNav = () => {
   return (
     <section className="w-full h-full flex flex-grow flex-col p-2 lg:w-64 md:w-32 px-3 md:px-2 border-r-[1px] border-border bg-background">
-      <h2 className="flex flex-col lg:flex-row items-center p-2 pt-0 text-lg font-bold">
-        <AppLogo />
-        <span className="hidden text-2xl lg:block">FINCENT</span>
+      <h2>
+        <Link href="/" className="cursor-pointer flex flex-col lg:flex-row items-center p-2 pt-0 text-lg font-bold">
+          <AppLogo />
+          <span className="hidden text-2xl lg:block">FINCENT</span>
+        </Link>
       </h2>
       <div className="h-full flex flex-col gap-2">
         <NavLinks links={_links} />
-        <PlaidLink variant="link"/>
         <div className="h-auto w-full grow rounded-md bg-background lg:block"/>
+        
         <SignOutForm />
       </div>
     </section>
@@ -119,7 +126,7 @@ export function MobileNavSheet() {
           <NavLinks links={_links} />
           <PlaidLink variant="link" className="w-full justify-start"/>
           <div className="h-auto w-full grow rounded-md bg-background lg:block"/>
-          <SignOutForm>Sign Out</SignOutForm>
+          <SignOutForm />
         </div>
       </SheetContent>
     </Sheet>

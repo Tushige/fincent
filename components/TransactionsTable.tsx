@@ -74,7 +74,7 @@ export function TransactionsTable<TData, TValue>({
                 </TableRow>
             )})
           ) : (
-            <div>No Data</div>
+            <div className="p-4 flex flex-row justify-center">No Data</div>
             )
           }
         </TableBody>

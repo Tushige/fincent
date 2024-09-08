@@ -6,8 +6,8 @@ import { redirect } from "next/navigation";
 import { SESSION_KEY } from "../utils";
 import { createDwollaCustomer } from "../server/dwolla";
 import { getUserByAuthUserId, getUserIdFromAuthUserId } from "./users.actions";
-import { plaidClient } from "../server/plaid";
 import { createIncomePublicToken, createPlaidUserToken } from "./plaid/plaid.actions";
+import { User } from "@/types";
 
 /**
  * 
@@ -17,7 +17,6 @@ import { createIncomePublicToken, createPlaidUserToken } from "./plaid/plaid.act
  * 
  */
 export async function signUpWithEmail({password, email, firstName, lastName, ...user}) {
-  let redirectPath: string = ''
   try {
     const { account, database } = await createAdminClient()
     const newUser = await account.create(ID.unique(), email, password, `${firstName} ${lastName}`)
@@ -62,17 +61,14 @@ export async function signUpWithEmail({password, email, firstName, lastName, ...
       sameSite: 'strict',
       secure: true
     })
-    redirectPath = `/link-banks?userId=${newUserDoc.$id}`
+    return newUserDoc;
   } catch (err) {
     console.error('[Sign Up] action failed with error ', err)
-    redirectPath = '/'
-  } finally {
-    redirect(redirectPath)
+    return null;
   }
 }
 
 export async function signIn({email, password}:{email: string, password: string}) {
-  let redirectPath: string = '/dashboard'
   try {
     const {account} = await createAdminClient()
     const session = await account.createEmailPasswordSession(email, password)
@@ -82,31 +78,27 @@ export async function signIn({email, password}:{email: string, password: string}
       sameSite: 'strict',
       secure: true
     })
-    const userId = session.$id
-    const userDoc = await getUserByAuthUserId(userId)
+    const userDoc = await getUserByAuthUserId(session.userId)
     return userDoc;
-    // fetch user doc here
   } catch (err) {
     console.error('[sign in] failed with error', err)
-    redirectPath = '/'
-  } finally {
-    redirect(redirectPath)
+    return null;
   }
 }
 
 export async function signOut() {
   try {
     const { account } = await createAdminClient()
-    await account.deleteSession(SESSION_KEY)
     cookies().delete(SESSION_KEY)
+    const result = await account.deleteSession('current')
   } catch (err) {
     console.error(err)
   } finally {
-    redirect('/sign-up')
+    redirect('/')
   }
 }
 
-export async function getSignedInUser() {
+export async function getSignedInUser(): Promise<User> {
   try {
     const {account} = await createSessionClient()
     const authUser = await account.get();

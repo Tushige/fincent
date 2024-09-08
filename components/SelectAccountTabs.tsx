@@ -20,7 +20,7 @@ const SelectAccountTabs = ({
     <div>
       {
         accounts.map(account => (
-          <Link href={`transaction-history?id=${account.bankId}`}>
+          <Link href={`transaction-history?id=${account.bankId}`} key={account.bankId}>
             {account.name}
           </Link>
         ))

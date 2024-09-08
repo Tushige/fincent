@@ -7,6 +7,9 @@ declare type LoginUser = {
   password: string;
 };
 
+/**
+ * User Collection 
+ */
 declare type User = {
   $id: string;
   email: string;
@@ -22,6 +25,7 @@ declare type User = {
   postalCode: string;
   dateOfBirth: string;
   ssn: string;
+  userToken: string;
 };
 
 declare interface PlaidLinkProps {
@@ -95,3 +99,21 @@ declare type NewDwollaCustomerParams = {
   dateOfBirth: string;
   ssn: string;
 };
+
+declare interface Transaction {
+  account_id: string,
+  amount: string,
+  category: string,
+  pending: boolean,
+  merchant_name: string,
+  name: string,
+  payment_channel: string,
+  logo_url: string,
+  date: string
+}
+
+export {
+  Account,
+  User,
+  Transaction
+}
