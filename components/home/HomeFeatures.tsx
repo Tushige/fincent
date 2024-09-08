@@ -38,7 +38,7 @@ export function HomeFeatures() {
   const staggerItems = stagger(0.5, { startDelay: 0.15 });
   return (
     <div className="bg-black py-8 relative overflow-hidden">
-      {/* <Meteors number={30} /> */}
+      <Meteors number={30} />
       <div className="container">
         <HomeSectionTitle title="What's Included" />
         <p className="text-center mt-5 text-xl text-white/70">Enjoy a quick overview of your expenses and income all in one place </p>
