@@ -28,21 +28,21 @@ const ChatIframe = () => {
       }
     `;
 
-    // iframe.src = "https://chatai-gen.vercel.app//chatbot/bdcfd400-63a3-44bd-a8cd-7a4ea6c08995"
-    iframe.src = "http://localhost:3000/chatbot/bdcfd400-63a3-44bd-a8cd-7a4ea6c08995"
+    iframe.src = "https://chatai-gen.vercel.app/chatbot/bdcfd400-63a3-44bd-a8cd-7a4ea6c08995"
+    // iframe.src = "http://localhost:3000/chatbot/bdcfd400-63a3-44bd-a8cd-7a4ea6c08995"
     iframe.className = "chat-frame";
 
     document.head.appendChild(style);
     document.body.appendChild(iframe);
 
     window.addEventListener("message", (e) => {
-      // if (e.origin !== "https://chatai-gen.vercel.app/") return;
-      if (e.origin !== "https://localhost:3000") return;
+      if (e.origin !== "https://chatai-gen.vercel.app/") return;
+      // if (e.origin !== "https://localhost:3000") return;
       let dimensions = JSON.parse(e.data);
       iframe.width = dimensions.width;
       iframe.height = dimensions.height;
-      // iframe.contentWindow.postMessage("bdcfd400-63a3-44bd-a8cd-7a4ea6c08995", "https://chatai-gen.vercel.app/")
-      iframe.contentWindow.postMessage("bdcfd400-63a3-44bd-a8cd-7a4ea6c08995", "http://localhost:3000/")
+      iframe.contentWindow.postMessage("bdcfd400-63a3-44bd-a8cd-7a4ea6c08995", "https://chatai-gen.vercel.app/")
+      // iframe.contentWindow.postMessage("bdcfd400-63a3-44bd-a8cd-7a4ea6c08995", "http://localhost:3000/")
     });
 
     return () => {
