@@ -1,4 +1,3 @@
-import { escape } from "querystring"
 import { useCallback, useState } from "react"
 
 export const useCopyToClipboard = () => {

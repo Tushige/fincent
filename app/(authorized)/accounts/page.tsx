@@ -19,7 +19,7 @@ const Accounts = async ({}) => {
     )
   }
   return (
-    <div className="flex flex-col gap-8 md:py-8 overflow-y-auto">
+    <div className="flex flex-col gap-8 pb-[100px] md:py-8 overflow-y-auto">
       <AppHeader title="Your Cards" className="mb-8"/>
       <div className="flex flex-wrap gap-4 justify-center md:justify-start">
         {

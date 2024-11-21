@@ -94,7 +94,7 @@ const TransferFundsForm = ({accounts}: {
                   <Textarea
                     {...field}
                     className="mt-2"
-                    placeholder="Include2 any relevant details or notes about this transfer."
+                    placeholder="Include any relevant details or notes about this transfer."
                   />
                 </FormControl>
               </FormItem>
