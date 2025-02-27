@@ -28,7 +28,7 @@ const ChatIframe = () => {
       }
     `;
 
-    iframe.src = "https://chatai-gen.vercel.app/chatbot/bdcfd400-63a3-44bd-a8cd-7a4ea6c08995"
+    iframe.src = "https://chatai-gen.vercel.app/chatbot/42e62b01-1d79-4b21-afd1-7d3131ad68e4"
     // iframe.src = "http://localhost:3000/chatbot/bdcfd400-63a3-44bd-a8cd-7a4ea6c08995"
     iframe.className = "chat-frame";
 
